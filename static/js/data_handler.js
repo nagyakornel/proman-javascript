@@ -13,8 +13,8 @@ export let dataHandler = {
             method: 'GET',
             credentials: 'same-origin'
         })
-        .then(response => response.json())  // parse the response as JSON
-        .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+            .then(response => response.json())  // parse the response as JSON
+            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
     _api_post: function (url, data, callback) {
         // it is not called from outside
@@ -36,19 +36,30 @@ export let dataHandler = {
         // the board is retrieved and then the callback function is called with the board
     },
     getStatuses: function (callback) {
-        // the statuses are retrieved and then the callback function is called with the statuses
+        this._api_get('/get-statuses', (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
     },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards
+        this._api_get('/get-cards-by-board/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
+        this._api_get('/create-new-board/' + boardTitle, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data

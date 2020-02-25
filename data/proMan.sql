@@ -99,6 +99,3 @@ INSERT INTO statuses VALUES (DEFAULT, 'done')
 
 INSERT INTO cards VALUES (DEFAULT, 1, 'test', 1, 0)
     RETURNING id;
-
-
-

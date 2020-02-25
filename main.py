@@ -5,10 +5,10 @@ import data_handler
 import util
 import SQL_data_manager
 
-
 app = Flask(__name__)
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 
 @app.route("/")
 def index():
@@ -57,6 +57,24 @@ def get_boards():
     All the boards
     """
     return data_handler.get_boards()
+
+
+@app.route("/get-statuses")
+@json_response
+def get_statuses():
+    return SQL_data_manager.get_statuses()
+
+
+@app.route("/create-new-board/<board_title>")
+@json_response
+def create_board(board_title: str):
+    return SQL_data_manager.create_board(board_title)
+
+
+@app.route("/get-cards-by-board/<board_id>")
+@json_response
+def get_cards_by_board(board_id: int):
+    return SQL_data_manager.get_cards_by_board(board_id)
 
 
 @app.route("/get-cards/<int:board_id>")
