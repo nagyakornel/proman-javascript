@@ -64,7 +64,7 @@ section.board{
     margin: 13px;
 }
 
-.board-columns{
+.board-body{
     display: flex;
     flex-wrap: nowrap;
 }
