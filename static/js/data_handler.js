@@ -34,24 +34,43 @@ export let dataHandler = {
     },
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
+        this._api_get('/get-board-by-id/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatuses: function (callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
+        this._api_get('/get-status-by-id/' + statusId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards
     },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
+        this._api_get('/get-card-by-id/' + cardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+        this._api_get('/create-card/' + cardTitle + '/' + boardId + '/' + statusId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     }
     // here comes more features
+
+    // TODO: get statuses(columns) by board id, add new status by board id, edit cards, boards, statuses,
+    //  delete and archive cards(new column to cards sql table), boards, columms
 };
