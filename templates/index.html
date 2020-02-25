@@ -11,8 +11,8 @@
           integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <link href="../static/css/design.css" rel="stylesheet">
+    <link href='../static/css/dragula.css' rel='stylesheet' type='text/css'/>
 </head>
 <body>
 <div class="board-container">
@@ -28,7 +28,7 @@
         <div class="board-body row">
             <div class="board-column col collapse multi-collapse" id="multiCollapseExample1">
                 <div class="board-column-title">New</div>
-                <div class="board-column-content">
+                <div class="board-column-content container" id="left-defaults">
                     <div class="card">
                         <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                         <div class="card-title">Card 1</div>
@@ -41,16 +41,24 @@
             </div>
             <div class="board-column col collapse multi-collapse" id="multiCollapseExample1">
                 <div class="board-column-title">In Progress</div>
-                <div class="board-column-content">
+                <div class="board-column-content container" id="right-defaults">
                     <div class="card">
                         <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                         <div class="card-title">Card 1</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                        <div class="card-title">Card 2</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+
+<script src="../static/js/main.js"></script>
+<script src='../static/js/dragula.js'></script>
+<script src='../static/js/example.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
