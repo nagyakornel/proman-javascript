@@ -79,9 +79,21 @@ export let dataHandler = {
             this._data = response;
             callback(response);
         });
-    }
+    },
     // here comes more features
+    addNewStatus: function (statusTitle, boardId, callback) {
+        this._api_get('/create-status/' + statusTitle + '/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    getStatusesByBoard: function (boardId, callback) {
+        this._api_get('/get-status-by-board/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    }
 
-    // TODO: get statuses(columns) by board id, add new status by board id, edit cards, boards, statuses,
-    //  delete and archive cards(new column to cards sql table), boards, columms
+    // TODO: edit cards, boards, statuses,
+    //  delete and archive cards(new column to cards in sql), boards, columms
 };
