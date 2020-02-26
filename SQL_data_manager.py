@@ -89,11 +89,11 @@ def get_statuses(cursor):
 
 
 @connection.connection_handler
-def get_cards_by_board(cursor, board_id):
+def get_cards_by_board(cursor, board_id, status_id):
     cursor.execute("""
                     SELECT * FROM cards
-                    WHERE board_id = %(id)s;
-                    """, {"id": board_id})
+                    WHERE board_id = %(id)s AND status_id = %(status_id)s;
+                    """, {"id": board_id, "status_id": status_id})
 
     cards = cursor.fetchall()
     return cards

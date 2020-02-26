@@ -100,10 +100,10 @@ def create_board(board_title: str):
     return SQL_data_manager.create_board(board_title)
 
 
-@app.route("/get-cards-by-board/<board_id>")
+@app.route("/get-cards-by-board/<int:board_id>/<int:status_id>")
 @json_response
-def get_cards_by_board(board_id: int):
-    return SQL_data_manager.get_cards_by_board(board_id)
+def get_cards_by_board(board_id: int, status_id: int):
+    return SQL_data_manager.get_cards_by_board(board_id, status_id)
 
 
 @app.route("/get-cards/<int:board_id>")
