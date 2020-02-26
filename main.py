@@ -67,6 +67,7 @@ def get_board_by_id_main(board_id: int):
     """
     return SQL_data_manager.get_board_by_id(board_id)
 
+
 @app.route("/get-status-by-id/<int:status_id>")
 @json_response
 def get_status_by_id_main(status_id: int):
@@ -75,6 +76,7 @@ def get_status_by_id_main(status_id: int):
     """
     return SQL_data_manager.get_status_by_id(status_id)
 
+
 @app.route("/get-card-by-id/<int:card_id>")
 @json_response
 def get_card_by_id_main(card_id: int):
@@ -82,6 +84,7 @@ def get_card_by_id_main(card_id: int):
     Returns card by card id
     """
     return SQL_data_manager.get_card_by_id(card_id)
+
 
 @app.route("/get-statuses")
 @json_response
@@ -110,6 +113,7 @@ def get_cards_for_board(board_id: int):
     """
     return data_handler.get_cards_for_board(board_id)
 
+
 @app.route('/create-card/<cardTitle>/<int:boardId>/<int:statusId>')
 @json_response
 def create_new_card_main(cardTitle, boardId: int, statusId: int):
@@ -117,6 +121,22 @@ def create_new_card_main(cardTitle, boardId: int, statusId: int):
     Creates new card and returns the new cards data
     """
     return SQL_data_manager.create_new_card(cardTitle, boardId, statusId)
+
+
+@app.route('/create-status/<statusTitle>/<int:boardId>')
+@json_response
+def new_status(statusTitle, boardId: int):
+    """
+    Adding new status(column) to board, existing or new
+    """
+    return SQL_data_manager.create_status(statusTitle, boardId)
+
+
+@app.route('/get-status-by-board/<int:boardId>')
+@json_response
+def get_statuses_by_board(boardId: int):
+    return SQL_data_manager.get_status_by_board(boardId)
+
 
 def main():
     app.run(

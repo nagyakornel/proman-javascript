@@ -113,3 +113,38 @@ def create_board(cursor, board_title):
     board = cursor.fetchall()
 
     return board
+
+#creates new status if it doesnt exist
+@connection.connection_handler
+def create_status(cursor, statusTitle, boardId):
+    cursor.execute("""
+    SELECT * FROM statuses
+    WHERE title = %(statusTitle)s;
+    """, {'statusTitle': statusTitle})
+    existing_status = cursor.fetchall()
+    status_id = existing_status[0]['id']
+    if len(existing_status) == 0:
+        cursor.execute("""
+        INSERT INTO statuses (title)
+        VALUES (%(statusTitle)s);
+        """, {'statusTitle': statusTitle})
+        cursor.execute("""
+        SELECT * FROM statuses
+        WHERE title = %(statusTitle)s;
+        """, {'statusTitle': statusTitle})
+        new_status = cursor.fetchall()
+        status_id = new_status[0]['id']
+
+    cursor.execute("""
+    INSERT INTO boards_statuses (board_id, status_id)
+    VALUES (%(boardId)s, %(status_id)s);
+    """, {'boardId': boardId, 'status_id': status_id})
+
+@connection.connection_handler
+def get_status_by_board(cursor, boardId):
+    cursor.execute("""
+    SELECT * FROM boards_statuses
+    WHERE board_id = %(boardId)s;
+    """, {'boardId': boardId})
+    statuses = cursor.fetchall()
+    return statuses
