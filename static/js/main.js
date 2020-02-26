@@ -12,5 +12,3 @@ function init() {
 }
 
 init();
-
-dragula([document.getElementById(left), document.getElementById(right)]);
