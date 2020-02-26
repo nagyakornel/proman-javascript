@@ -1,14 +1,12 @@
-import "./dragula.js"
-import "./example.min.js"
-import { dom } from "./dom.js";
+import { dataHandler } from "./data_handler.js";
 
-// This function is to initialize the application
-function init() {
-    // init data
-    dom.init();
-    // loads the boards to the screen
-    dom.loadBoards();
+let boards = dataHandler.getBoards(showBoards);
+console.log(boards);
+
+function showBoards(boards) {
+    console.log(boards);
+    for (let board of boards){
+        document.body.innerHTML += board.id;
+    }
 
 }
-
-init();
