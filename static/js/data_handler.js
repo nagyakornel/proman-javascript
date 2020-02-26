@@ -13,8 +13,8 @@ export let dataHandler = {
             method: 'GET',
             credentials: 'same-origin'
         })
-        .then(response => response.json())  // parse the response as JSON
-        .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+            .then(response => response.json())  // parse the response as JSON
+            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
     _api_post: function (url, data, callback) {
         // it is not called from outside
@@ -34,24 +34,54 @@ export let dataHandler = {
     },
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
+        this._api_get('/get-board-by-id/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatuses: function (callback) {
-        // the statuses are retrieved and then the callback function is called with the statuses
+        this._api_get('/get-statuses', (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
+        this._api_get('/get-status-by-id/' + statusId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards
+        this._api_get('/get-cards-by-board/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
+        this._api_get('/get-card-by-id/' + cardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
+        this._api_get('/create-new-board/' + boardTitle, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+        this._api_get('/create-card/' + cardTitle + '/' + boardId + '/' + statusId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     }
     // here comes more features
+
+    // TODO: get statuses(columns) by board id, add new status by board id, edit cards, boards, statuses,
+    //  delete and archive cards(new column to cards sql table), boards, columms
 };

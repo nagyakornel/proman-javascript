@@ -5,10 +5,10 @@ import data_handler
 import util
 import SQL_data_manager
 
-
 app = Flask(__name__)
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 
 @app.route("/")
 def index():
@@ -56,7 +56,49 @@ def get_boards():
     """
     All the boards
     """
-    return data_handler.get_boards()
+    return SQL_data_manager.get_all_boards()
+
+
+@app.route("/get-board-by-id/<int:board_id>")
+@json_response
+def get_board_by_id_main(board_id: int):
+    """
+    Returns board with given ID
+    """
+    return SQL_data_manager.get_board_by_id(board_id)
+
+@app.route("/get-status-by-id/<int:status_id>")
+@json_response
+def get_status_by_id_main(status_id: int):
+    """
+    Returns status by status id
+    """
+    return SQL_data_manager.get_status_by_id(status_id)
+
+@app.route("/get-card-by-id/<int:card_id>")
+@json_response
+def get_card_by_id_main(card_id: int):
+    """
+    Returns card by card id
+    """
+    return SQL_data_manager.get_card_by_id(card_id)
+
+@app.route("/get-statuses")
+@json_response
+def get_statuses():
+    return SQL_data_manager.get_statuses()
+
+
+@app.route("/create-new-board/<board_title>")
+@json_response
+def create_board(board_title: str):
+    return SQL_data_manager.create_board(board_title)
+
+
+@app.route("/get-cards-by-board/<board_id>")
+@json_response
+def get_cards_by_board(board_id: int):
+    return SQL_data_manager.get_cards_by_board(board_id)
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -68,6 +110,13 @@ def get_cards_for_board(board_id: int):
     """
     return data_handler.get_cards_for_board(board_id)
 
+@app.route('/create-card/<cardTitle>/<int:boardId>/<int:statusId>')
+@json_response
+def create_new_card_main(cardTitle, boardId: int, statusId: int):
+    """
+    Creates new card and returns the new cards data
+    """
+    return SQL_data_manager.create_new_card(cardTitle, boardId, statusId)
 
 def main():
     app.run(

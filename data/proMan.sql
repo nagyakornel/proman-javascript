@@ -12,7 +12,8 @@ ALTER TABLE IF EXISTS ONLY public.cards DROP CONSTRAINT IF EXISTS pk_card_id CAS
 ALTER TABLE IF EXISTS ONLY public.cards DROP CONSTRAINT IF EXISTS fk_board_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.cards DROP CONSTRAINT IF EXISTS fk_status_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS pk_user_id CASCADE;
-
+ALTER TABLE IF EXISTS ONLY public.boards_statuses DROP CONSTRAINT IF EXISTS fk_board_id CASCADE;
+ALTER TABLE IF EXISTS ONLY public.boards_statuses DROP CONSTRAINT IF EXISTS fk_status_id CASCADE;
 
 
 DROP TABLE IF EXISTS public.statuses;
@@ -51,6 +52,11 @@ CREATE TABLE users (
     password text
 );
 
+DROP TABLE IF EXISTS public.boards_statuses;
+CREATE TABLE boards_statuses (
+    board_id integer not NULL,
+    status_id integer not NULL
+);
 
 ALTER TABLE ONLY statuses
     ADD CONSTRAINT pk_status_id PRIMARY KEY (id);
@@ -75,14 +81,21 @@ ALTER TABLE ONLY cards
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
 
+ALTER TABLE ONLY boards_statuses
+    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards(id);
+
+ALTER TABLE ONLY boards_statuses
+    ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses(id);
 
 
 INSERT INTO users VALUES (DEFAULT, 'admin', '$2b$12$jXWgU/asaN7kwaSdoVWuge1pWkg/Je4gSViTUMKipZBffr4To0XmS')
     RETURNING id;
 
-
-
 INSERT INTO boards VALUES (DEFAULT, 'test_board', 1, true)
+    RETURNING id;
+INSERT INTO boards VALUES (DEFAULT, 'test_board_2', 1, true)
+    RETURNING id;
+INSERT INTO boards VALUES (DEFAULT, 'test_board_3', 1, true)
     RETURNING id;
 
 INSERT INTO statuses VALUES (DEFAULT, 'new')
@@ -97,8 +110,27 @@ INSERT INTO statuses VALUES (DEFAULT, 'testing')
 INSERT INTO statuses VALUES (DEFAULT, 'done')
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 1, 'test', 1, 0)
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_1', 1, 0)
     RETURNING id;
 
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_2', 2, 0)
+    RETURNING id;
 
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_3', 3, 0)
+    RETURNING id;
 
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_4', 4, 0)
+    RETURNING id;
+
+INSERT INTO cards VALUES (DEFAULT, 2, 'test_card_2_1', 4, 0)
+    RETURNING id;
+
+INSERT INTO cards VALUES (DEFAULT, 2, 'test_card_2_2', 3, 0)
+    RETURNING id;
+
+INSERT INTO boards_statuses VALUES(1, 1);
+INSERT INTO boards_statuses VALUES(1, 2);
+INSERT INTO boards_statuses VALUES(1, 3);
+INSERT INTO boards_statuses VALUES(1, 4);
+INSERT INTO boards_statuses VALUES(2, 3);
+INSERT INTO boards_statuses VALUES(2, 4);
