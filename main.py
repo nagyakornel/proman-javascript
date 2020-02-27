@@ -153,6 +153,54 @@ def get_statuses_by_board(boardId: int):
     return SQL_data_manager.get_status_by_board(boardId)
 
 
+@app.route('/edit-card-title/<cardId>/<newCardTitle>')
+@json_response
+def edit_card_title(cardId: int, newCardTitle):
+    return SQL_data_manager.edit_card_title(cardId, newCardTitle)
+
+
+@app.route('/edit-board-title/<boardId>/<newBoardTitle>')
+@json_response
+def edit_board_title(boardId: int, newBoardTitle):
+    return SQL_data_manager.edit_card_title(boardId, newBoardTitle)
+
+
+@app.route('/edit-status-title/<statusId>/<newStatusTitle>')
+@json_response
+def edit_status_title(statusId: int, newStatusTitle):
+    return SQL_data_manager.edit_card_title(statusId, newStatusTitle)
+
+
+@app.route('/delete-card/<cardId>')
+@json_response
+def delete_card(cardId: int):
+    return SQL_data_manager.delete_card(cardId)
+
+
+@app.route('/archive-card/<cardId>')
+@json_response
+def archive_card(cardId: int):
+    return SQL_data_manager.archive_card(cardId)
+
+
+@app.route('/delete-board/<boardId>')
+@json_response
+def delete_board(boardId: int):
+    return SQL_data_manager.delete_board(boardId)
+
+
+@app.route('/delete-status/<statusId>')
+@json_response
+def delete_status(statusId: int):
+    return SQL_data_manager.delete_status(statusId)
+
+
+@app.route('/is-archived/<cardId>')
+@json_response
+def is_archived(cardId: int):
+    return SQL_data_manager.is_archived(cardId)
+
+
 def main():
     app.run(
         host='0.0.0.0',

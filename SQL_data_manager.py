@@ -173,3 +173,75 @@ def get_user_id_by_username(cursor, username):
 
     user = cursor.fetchall()
     return user[0]['id']
+
+
+@connection.connection_handler
+def edit_card_title(cursor, cardId, newCardTitle):
+    cursor.execute("""
+    UPDATE cards
+    SET title = %(newCardTitle)s
+    WHERE id = %(cardId)s;
+    """, {"newCardTitle": newCardTitle, "cardId": cardId})
+
+
+@connection.connection_handler
+def edit_board_title(cursor, boardId, newBoardTitle):
+    cursor.execute("""
+    UPDATE boards
+    SET title = %(newBoardTitle)s
+    WHERE id = %(boardId)s;
+    """, {"newBoardTitle": newBoardTitle, "boardId": boardId})
+
+
+@connection.connection_handler
+def edit_status_title(cursor, statusId, newStatusTitle):
+    cursor.execute("""
+    UPDATE statuses
+    SET title = %(newStatusTitle)s
+    WHERE id = %(statusId)s;
+    """, {"newStatusTitle": newStatusTitle, "statusId": statusId})
+
+
+@connection.connection_handler
+def delete_card(cursor, cardId):
+    cursor.execute("""
+    DELETE FROM cards
+    WHERE id = %(cardId)s;
+            """, {"cardId": cardId})
+
+
+@connection.connection_handler
+def archive_card(cursor, cardId):
+    cursor.execute("""
+    UPDATE cards
+    SET archived = True
+    WHERE id = %(cardId)s
+            """, {"cardId": cardId})
+
+
+@connection.connection_handler
+def delete_board(cursor, boardId):
+    cursor.execute("""
+    DELETE FROM boards
+    WHERE id = %(boardId)s;
+            """, {"boardId": boardId})
+
+
+@connection.connection_handler
+def delete_status(cursor, statusId):
+    cursor.execute("""
+    DELETE FROM statuses
+    WHERE id = %(statusId)s;
+            """, {"statusId": statusId})
+
+
+@connection.connection_handler
+def is_archived(cursor, cardId):
+    cursor.execute("""
+    SELECT archived FROM cards
+    WHERE id = %(cardId)s
+    """, {"cardId": cardId})
+
+    archived = cursor.fetchall()
+
+    return archived
