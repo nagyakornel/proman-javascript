@@ -57,7 +57,7 @@ def get_status_by_id(cursor, status_id):
 @connection.connection_handler
 def get_card_by_id(cursor, card_id):
     cursor.execute("""
-    SELECT title FROM statuses
+    SELECT * FROM cards
     WHERE id = %(card_id)s;
     """, {'card_id': card_id})
     card = cursor.fetchall()

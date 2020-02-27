@@ -161,11 +161,39 @@ function archiveCard(t) {
         })
 }
 
-function restoreCard(t){
+function restoreCard(t) {
     fetch('/restore-card/' + t.target.dataset.cardId)
         .then((response) => {
             t.target.parentNode.parentNode.remove();
+            showRestoredCard(t);
         })
+}
+
+function showRestoredCard(t) {
+    fetch('/get-card-by-id/' + t.target.dataset.cardId)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            data = data[0];
+            console.log('dragula-' + data['board_id'] + '-' + data['status_id']);
+            let column = document.getElementById('dragula-' + data['board_id'] + '-' + data['status_id']);
+            let card = document.createElement('div');
+            card.className = 'card';
+            let cardRemove = document.createElement('div');
+            cardRemove.className = 'card-remove';
+            let cardRemoveButton = document.createElement('i');
+            cardRemoveButton.className = 'fas fa-trash-alt';
+            cardRemoveButton.dataset.cardId = data['id'];
+            cardRemoveButton.addEventListener('click', archiveCard);
+            let cardTitle = document.createElement('div');
+            cardTitle.className = 'card-title';
+            cardTitle.innerHTML = data['title'];
+            cardRemove.appendChild(cardRemoveButton);
+            card.appendChild(cardRemove);
+            card.appendChild(cardTitle);
+            column.appendChild(card);
+        });
 }
 
 function getArchivedCards(t) {
@@ -181,28 +209,34 @@ function getArchivedCards(t) {
 }
 
 function showArchivedCards(cards) {
-    let boardId = cards[0].board_id;
-    console.log(boardId);
-    let modalBody = document.querySelector('#modal-body-' + boardId);
-    console.log(modalBody.innerHTML);
-    modalBody.innerHTML = '';
-    for (let card of cards) {
-        let cardDiv = document.createElement('div');
-        cardDiv.className = 'card';
-        let cardTitle = document.createElement('div');
-        cardTitle.className = 'card-title';
-        cardTitle.innerHTML = card.title;
-        let cardRestore = document.createElement('div');
-        cardRestore.className = 'card-remove';
-        let cardRestoreButton = document.createElement('i');
-        cardRestoreButton.className = 'fas fa-window-restore';
-        cardRestoreButton.dataset.cardId = card.id;
-        cardRestoreButton.addEventListener('click', restoreCard);
-        cardRestore.appendChild(cardRestoreButton);
-        cardDiv.appendChild(cardRestore);
-        cardDiv.appendChild(cardTitle);
-        modalBody.appendChild(cardDiv);
+    try {
+        let boardId = cards[0].board_id;
+        console.log(boardId);
+        let modalBody = document.querySelector('#modal-body-' + boardId);
+        console.log(modalBody.innerHTML);
+        modalBody.innerHTML = '';
+        for (let card of cards) {
+            let cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            let cardTitle = document.createElement('div');
+            cardTitle.className = 'card-title';
+            cardTitle.innerHTML = card.title;
+            let cardRestore = document.createElement('div');
+            cardRestore.className = 'card-remove';
+            let cardRestoreButton = document.createElement('i');
+            cardRestoreButton.className = 'fas fa-window-restore';
+            cardRestoreButton.dataset.cardId = card.id;
+            cardRestoreButton.addEventListener('click', restoreCard);
+            cardRestore.appendChild(cardRestoreButton);
+            cardDiv.appendChild(cardRestore);
+            cardDiv.appendChild(cardTitle);
+            modalBody.appendChild(cardDiv);
+        }
+    } catch
+        (err) {
+        console.log(err);
     }
+    
 }
 
 let createNewPublicBoard = document.getElementById('create-public-board');
