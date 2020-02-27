@@ -4,7 +4,6 @@ dataHandler.getBoards(showBoards);
 console.log(document.getElementById('copycard'));
 
 
-
 function showBoards(boards) {
     let i = 0;
     let x = 0;
@@ -78,7 +77,7 @@ function showBoards(boards) {
 
                     boardColumn.appendChild(boardColumnContent);
                     boardBody.appendChild(boardColumn);
-                    if (i === x-1) {
+                    if (i === x - 1) {
                         console.log('fut');
                         let containerNodes = document.querySelectorAll('.container');
                         let containerArrays = Array.from(containerNodes);
@@ -88,9 +87,10 @@ function showBoards(boards) {
                                 return source === document.getElementById('copycard')
                             },
                             accepts: function (el, target) {
-                                return target !== document.getElementById('copycard')},
+                                return target !== document.getElementById('copycard')
+                            },
                             revertOnSpill: true
-                            })
+                        })
                     }
                     i++;
                 }
@@ -108,86 +108,101 @@ createNewPublicBoard.addEventListener('click', function () {
     createBoard(true)
 })
 let createNewPrivateBoard = document.getElementById('create-private-board');
-createNewPrivateBoard.addEventListener('click', function () {
-    createBoard(false)
-})
+if (createNewPrivateBoard !== null) {
+    createNewPrivateBoard.addEventListener('click', function () {
+        createBoard(false)
+    })
+}
 
 function createBoard(publicity) {
-        let boardContainer = document.createElement('div');
-        boardContainer.className = 'board-container';
-        let section = document.createElement('section');
-        section.className = 'board';
-        let boardHeader = document.createElement('div');
-        boardHeader.className = 'board-header';
+
+    let boardContainer = document.createElement('div');
+    boardContainer.className = 'board-container';
+    let section = document.createElement('section');
+    section.className = 'board';
+    let boardHeader = document.createElement('div');
+    boardHeader.className = 'board-header';
 
 
-        let boardTitle = document.createElement('input');
-        boardTitle.setAttribute('type', 'text');
-        boardTitle.setAttribute('placeholder', 'New board');
-        boardTitle.className = 'board-title';
-        boardTitle.setAttribute('id', 'newboardtitle');
-        let saveButton = document.createElement('button');
-        saveButton.innerText = 'Save';
-        boardTitle.addEventListener('blur', function () {
-            console.log('blur')
-            let newBoardTitle = 'New board'
-            if (boardTitle.value) {
-                newBoardTitle = boardTitle.value
+    let boardTitle = document.createElement('input');
+    boardTitle.setAttribute('type', 'text');
+    boardTitle.setAttribute('placeholder', 'New board');
+    boardTitle.className = 'board-title';
+    boardTitle.setAttribute('id', 'newboardtitle');
+    let saveButton = document.createElement('button');
+    saveButton.innerText = 'Save';
+    boardTitle.addEventListener('blur', function () {
+        console.log('blur')
+        let newBoardTitle = 'New board'
+        if (boardTitle.value) {
+            newBoardTitle = boardTitle.value
+        }
+        dataHandler.createNewBoard(newBoardTitle, publicity, getNewBoard)
+
+        function getNewBoard(data) {
+            console.log(data)
+            let newBoardTitle = document.createElement('span');
+            newBoardTitle.innerHTML = data[0].title;
+            newBoardTitle.className = 'board-title';
+            boardHeader.removeChild(saveButton);
+            let oldBoardTitle = document.getElementById('newboardtitle');
+            boardHeader.removeChild(oldBoardTitle);
+            boardHeader.appendChild(newBoardTitle);
+            let boardAdd = document.createElement('button');
+            boardAdd.className = 'board-add';
+            boardAdd.innerHTML = 'Add Card';
+            boardHeader.appendChild(boardAdd);
+            let boardToggle = document.createElement('button');
+            boardToggle.className = 'board-toggle';
+            boardToggle.type = 'button';
+            boardToggle.dataset.toggle = 'collapse';
+            boardToggle.dataset.target = '.multi-collapse' + data[0].id;
+            let arrowIcon = document.createElement('i');
+            arrowIcon.className = 'fas fa-chevron-down';
+            boardToggle.appendChild(arrowIcon);
+            boardHeader.appendChild(boardToggle);
+            let columnTitles = ['new', 'in progress', 'testing', 'done']
+            for (let i = 0; i < columnTitles.length; i++) {
+                columnsForNewBoards(columnTitles[i], i + 1)
             }
-            dataHandler.createNewBoard(newBoardTitle, publicity, getNewBoard)
-            function getNewBoard(data) {
-                console.log(data)
-                let newBoardTitle = document.createElement('span');
-                newBoardTitle.innerHTML = data[0].title;
-                newBoardTitle.className = 'board-title';
-                boardHeader.removeChild(saveButton);
-                let oldBoardTitle = document.getElementById('newboardtitle');
-                boardHeader.removeChild(oldBoardTitle);
-                boardHeader.appendChild(newBoardTitle);
-                let boardAdd = document.createElement('button');
-                boardAdd.className = 'board-add';
-                boardAdd.innerHTML = 'Add Card';
-                boardHeader.appendChild(boardAdd);
-                let boardToggle = document.createElement('button');
-                boardToggle.className = 'board-toggle';
-                boardToggle.type = 'button';
-                boardToggle.dataset.toggle = 'collapse';
-                boardToggle.dataset.target = '.multi-collapse' + data[0].id;
-                let arrowIcon = document.createElement('i');
-                arrowIcon.className = 'fas fa-chevron-down';
-                boardToggle.appendChild(arrowIcon);
-                boardHeader.appendChild(boardToggle);
-                let columnTitles = ['new', 'in progress', 'testing', 'done']
-                for (let title of columnTitles) {
-                    columnsForNewBoards(title)
-                }
-                function columnsForNewBoards(columnTitle) {
-                    let boardColumn = document.createElement('div');
-                    boardColumn.className = 'board-column col collapse multi-collapse' + data[0].id;
-                    let boardColumnTitle = document.createElement('div');
-                    boardColumnTitle.className = 'board-column-title';
-                    boardColumnTitle.innerHTML = columnTitle;
-                    boardColumn.appendChild(boardColumnTitle);
-                    let boardColumnContent = document.createElement('div');
-                    boardColumnContent.className = 'board-column-content container';
-                    boardColumn.appendChild(boardColumnTitle);
-                    boardColumn.appendChild(boardColumnContent);
-                    boardBody.appendChild(boardColumn);
-                    section.appendChild(boardBody);
-                }
 
+            function columnsForNewBoards(columnTitle, statusIndex) {
+                let boardColumn = document.createElement('div');
+                boardColumn.className = 'board-column col collapse multi-collapse' + data[0].id;
+                let boardColumnTitle = document.createElement('div');
+                boardColumnTitle.className = 'board-column-title';
+                boardColumnTitle.innerHTML = columnTitle;
+                boardColumn.appendChild(boardColumnTitle);
+                let boardColumnContent = document.createElement('div');
+                boardColumnContent.className = 'board-column-content container';
+
+                boardColumnContent.id = `dragula-${data[0].id}-${statusIndex}`;
+
+                boardColumn.appendChild(boardColumnTitle);
+                boardColumn.appendChild(boardColumnContent);
+                boardBody.appendChild(boardColumn);
+                section.appendChild(boardBody);
+                console.log('hh')
             }
-        });
-
-        boardHeader.appendChild(boardTitle);
-        boardHeader.appendChild(saveButton);
-        section.appendChild(boardHeader);
-        let boardBody = document.createElement('div');
-        boardBody.className = 'board-body row';
-        boardContainer.appendChild(section);
-        document.body.appendChild(boardContainer)
 
 
+            for (let i = 1; i < 5; i++) {
+                console.log('elindul')
+                console.log(document.getElementById(`dragula-${data[0].id}-${i}`))
+                dragula(document.getElementById(`dragula-${data[0].id}-${i}`), {
+                    revertOnSpill: true
+                })
+            }
+
+        }
+    });
+    boardHeader.appendChild(boardTitle);
+    boardHeader.appendChild(saveButton);
+    section.appendChild(boardHeader);
+    let boardBody = document.createElement('div');
+    boardBody.className = 'board-body row';
+    boardContainer.appendChild(section);
+    document.body.appendChild(boardContainer);
 
 
 }
