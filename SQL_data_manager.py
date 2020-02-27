@@ -103,6 +103,17 @@ def get_cards_by_board(cursor, board_id, status_id):
 
 
 @connection.connection_handler
+def get_archived_cards_by_board(cursor, board_id):
+    cursor.execute("""
+                    SELECT * FROM cards
+                    WHERE board_id = %(id)s AND archived = true;
+                    """, {"id": board_id})
+
+    cards = cursor.fetchall()
+    return cards
+
+
+@connection.connection_handler
 def create_board(cursor, board_title, publicity, user_id):
     cursor.execute("""
                     INSERT INTO boards(title,user_id,public)
@@ -215,6 +226,15 @@ def archive_card(cursor, cardId):
     cursor.execute("""
     UPDATE cards
     SET archived = True
+    WHERE id = %(cardId)s
+            """, {"cardId": cardId})
+
+
+@connection.connection_handler
+def restore_card(cursor, cardId):
+    cursor.execute("""
+    UPDATE cards
+    SET archived = False
     WHERE id = %(cardId)s
             """, {"cardId": cardId})
 

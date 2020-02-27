@@ -117,6 +117,12 @@ def get_cards_by_board(board_id: int, status_id: int):
     return SQL_data_manager.get_cards_by_board(board_id, status_id)
 
 
+@app.route("/get-archived-cards-by-board/<int:board_id>")
+@json_response
+def get_archived_cards_by_board(board_id: int):
+    return SQL_data_manager.get_archived_cards_by_board(board_id)
+
+
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_cards_for_board(board_id: int):
@@ -173,6 +179,13 @@ def edit_status_title(statusId: int, newStatusTitle):
 @json_response
 def delete_card(cardId: int):
     return SQL_data_manager.delete_card(cardId)
+
+
+@app.route('/restore-card/<cardId>')
+@json_response
+def restore_card(cardId: int):
+    print('restore' + cardId)
+    return SQL_data_manager.restore_card(cardId)
 
 
 @app.route('/archive-card/<cardId>')

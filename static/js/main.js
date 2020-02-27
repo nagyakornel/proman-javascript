@@ -25,6 +25,8 @@ function showBoards(boards) {
         boardShowArchive.innerHTML = 'Show archived cards';
         boardShowArchive.dataset.toggle = 'modal';
         boardShowArchive.dataset.target = '#modal-' + board.id;
+        boardShowArchive.dataset.board = board.id;
+        boardShowArchive.addEventListener('click', getArchivedCards);
         let boardToggle = document.createElement('button');
         boardToggle.className = 'board-toggle';
         boardToggle.type = 'button';
@@ -126,6 +128,7 @@ function showBoards(boards) {
                 modalTitle.innerHTML = 'Archived cards:';
                 let modalBody = document.createElement('div');
                 modalBody.className = 'modal-body';
+                modalBody.id = 'modal-body-' + board.id;
                 modalBody.innerHTML = 'Content';
                 let modalFooter = document.createElement('div');
                 modalFooter.className = 'modal-footer';
@@ -145,7 +148,6 @@ function showBoards(boards) {
                 boardContainer.appendChild(modalFade);
 
 
-
                 document.body.appendChild(boardContainer);
             }
         }
@@ -157,6 +159,50 @@ function archiveCard(t) {
         .then((response) => {
             t.target.parentNode.parentNode.remove();
         })
+}
+
+function restoreCard(t){
+    fetch('/restore-card/' + t.target.dataset.cardId)
+        .then((response) => {
+            t.target.parentNode.parentNode.remove();
+        })
+}
+
+function getArchivedCards(t) {
+    console.log(t.target.dataset.board);
+    fetch('/get-archived-cards-by-board/' + t.target.dataset.board)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            showArchivedCards(data);
+        });
+}
+
+function showArchivedCards(cards) {
+    let boardId = cards[0].board_id;
+    console.log(boardId);
+    let modalBody = document.querySelector('#modal-body-' + boardId);
+    console.log(modalBody.innerHTML);
+    modalBody.innerHTML = '';
+    for (let card of cards) {
+        let cardDiv = document.createElement('div');
+        cardDiv.className = 'card';
+        let cardTitle = document.createElement('div');
+        cardTitle.className = 'card-title';
+        cardTitle.innerHTML = card.title;
+        let cardRestore = document.createElement('div');
+        cardRestore.className = 'card-remove';
+        let cardRestoreButton = document.createElement('i');
+        cardRestoreButton.className = 'fas fa-window-restore';
+        cardRestoreButton.dataset.cardId = card.id;
+        cardRestoreButton.addEventListener('click', restoreCard);
+        cardRestore.appendChild(cardRestoreButton);
+        cardDiv.appendChild(cardRestore);
+        cardDiv.appendChild(cardTitle);
+        modalBody.appendChild(cardDiv);
+    }
 }
 
 let createNewPublicBoard = document.getElementById('create-public-board');
@@ -191,7 +237,7 @@ function createBoard(publicity) {
         if (boardTitle.value) {
             newBoardTitle = boardTitle.value
         }
-        dataHandler.createNewBoard(newBoardTitle, publicity, getNewBoard)
+        dataHandler.createNewBoard(newBoardTitle, publicity, getNewBoard);
 
         function getNewBoard(data) {
             console.log(data)
@@ -209,6 +255,9 @@ function createBoard(publicity) {
             let boardShowArchive = document.createElement('button');
             boardShowArchive.className = 'board-add';
             boardShowArchive.innerHTML = 'Show archived cards';
+            boardShowArchive.dataset.toggle = 'modal';
+            boardShowArchive.dataset.target = '#modal-' + board.id;
+            boardShowArchive.addEventListener('click', getArchivedCards);
             boardHeader.appendChild(boardShowArchive);
             let boardToggle = document.createElement('button');
             boardToggle.className = 'board-toggle';
