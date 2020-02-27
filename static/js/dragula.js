@@ -265,7 +265,6 @@ function dragula (initialContainers, options) {
     _grabbed = false;
     eventualMovements(true);
     movements(true);
-
   }
 
   function release (e) {
@@ -297,13 +296,8 @@ function dragula (initialContainers, options) {
       drake.emit('cancel', item, _source, _source);
     } else {
       drake.emit('drop', item, target, _source, _currentSibling);
-      // Végigmenni az előző oszlopon idkat átírni
-      // Végigmenni a target oszlopon idkat átírni
-      console.log(target);
-      console.log(item);
     }
     cleanup();
-
   }
 
   function remove () {
