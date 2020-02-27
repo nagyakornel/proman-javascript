@@ -212,3 +212,16 @@ def delete_status(cursor, statusId):
     DELETE FROM statuses
     WHERE id = %(statusId)s;
             """, {"statusId": statusId})
+
+
+@connection.connection_handler
+def is_archived(cursor, cardId):
+    cursor.execute("""
+    SELECT archived FROM cards
+    WHERE id = %(cardId)s
+    """, {"cardId": cardId})
+
+    archived = cursor.fetchall()
+
+    return archived
+

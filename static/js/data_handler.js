@@ -93,44 +93,50 @@ export let dataHandler = {
             callback(response);
         });
     },
-    editCardTitle: function (cardId, newCardTitle) {
+    editCardTitle: function (cardId, newCardTitle, callback) {
         this._api_get('/edit-card-title/' + cardId + '/' + newCardTitle, (response) => {
             this._data = response;
             callback(response);
         });
     },
-    editBoardTitle: function (boardId, newBoardTitle) {
-        this._api_get('/edit-board-title/' + cardId + '/' + newBoardTitle, (response) => {
+    editBoardTitle: function (boardId, newBoardTitle, callback) {
+        this._api_get('/edit-board-title/' + boardId + '/' + newBoardTitle, (response) => {
             this._data = response;
             callback(response);
         });
     },
-    editStatusTitle: function (statusId, newStatusTitle) {
+    editStatusTitle: function (statusId, newStatusTitle, callback) {
         this._api_get('/edit-status-title/' + statusId + '/' + newStatusTitle, (response) => {
             this._data = response;
             callback(response);
         });
     },
-    deleteCard: function (cardId) {
+    deleteCard: function (cardId, callback) {
         this._api_get('/delete-card/' + cardId, (response) => {
             this._data = response;
             callback(response);
         });
     },
-    archiveCard: function (cardId) {
+    archiveCard: function (cardId, callback) {
         this._api_get('/archive-card/' + cardId, (response) => {
             this._data = response;
             callback(response);
         });
     },
-    deleteBoard: function (cardId) {
+    deleteBoard: function (boardId, callback) {
         this._api_get('/delete-board/' + boardId, (response) => {
             this._data = response;
             callback(response);
         });
     },
-    deleteStatus: function (statusId) {
+    deleteStatus: function (statusId,callback) {
         this._api_get('/delete-status/' + statusId, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    isArchived: function (cardId, callback) {
+        this._api_get('/is-archived/' + cardId, (response) => {
             this._data = response;
             callback(response);
         });

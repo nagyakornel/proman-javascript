@@ -73,7 +73,7 @@ function showBoards(boards) {
 
                     boardColumn.appendChild(boardColumnContent);
                     boardBody.appendChild(boardColumn);
-                    if (i === 6) {
+                    if (i === 5) {
                         console.log('fut');
                         let containerNodes = document.querySelectorAll('.container');
                         let containerArrays = Array.from(containerNodes);

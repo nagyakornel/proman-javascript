@@ -185,6 +185,12 @@ def delete_status(statusId: int):
     return SQL_data_manager.delete_status(statusId)
 
 
+@app.route('/is-archived/<cardId>')
+@json_response
+def is_archived(cardId: int):
+    return SQL_data_manager.is_archived(cardId)
+
+
 def main():
     app.run(
         host='0.0.0.0',
