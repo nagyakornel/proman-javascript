@@ -75,7 +75,7 @@ export let dataHandler = {
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
-        this._api_get('/create-card/' + cardTitle + '/' + boardId + '/' + statusId, (response) => {
+        this._api_get('/create-card/' + cardTitle + '/' + boardId + '/' + statusId + '/' + archived, (response) => {
             this._data = response;
             callback(response);
         });
@@ -92,8 +92,50 @@ export let dataHandler = {
             this._data = response;
             callback(response);
         });
+    },
+    editCardTitle: function (cardId, newCardTitle) {
+        this._api_get('/edit-card-title/' + cardId + '/' + newCardTitle, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    editBoardTitle: function (boardId, newBoardTitle) {
+        this._api_get('/edit-board-title/' + cardId + '/' + newBoardTitle, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    editStatusTitle: function (statusId, newStatusTitle) {
+        this._api_get('/edit-status-title/' + statusId + '/' + newStatusTitle, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    deleteCard: function (cardId) {
+        this._api_get('/delete-card/' + cardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    archiveCard: function (cardId) {
+        this._api_get('/archive-card/' + cardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    deleteBoard: function (cardId) {
+        this._api_get('/delete-board/' + boardId, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
+    deleteStatus: function (statusId) {
+        this._api_get('/delete-status/' + statusId, (response) => {
+            this._data = response;
+            callback(response);
+        });
     }
 
-    // TODO: edit cards, boards, statuses,
-    //  delete and archive cards(new column to cards in sql), boards, columms
+    // TODO: edit cards (status)
+
 };

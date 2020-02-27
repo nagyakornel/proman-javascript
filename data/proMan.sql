@@ -40,7 +40,8 @@ CREATE TABLE cards (
     board_id int,
     title text,
     status_id int,
-    card_order int
+    card_order int,
+    archived bool DEFAULT false
 );
 
 
@@ -110,22 +111,22 @@ INSERT INTO statuses VALUES (DEFAULT, 'testing')
 INSERT INTO statuses VALUES (DEFAULT, 'done')
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_1', 1, 0)
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_1', 1, 0, false)
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_2', 2, 0)
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_2', 2, 0, false)
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_3', 3, 0)
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_3', 3, 0, false)
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_4', 4, 0)
+INSERT INTO cards VALUES (DEFAULT, 1, 'test_card_4', 4, 0, false)
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 2, 'test_card_2_1', 4, 0)
+INSERT INTO cards VALUES (DEFAULT, 2, 'test_card_2_1', 4, 0, false)
     RETURNING id;
 
-INSERT INTO cards VALUES (DEFAULT, 2, 'test_card_2_2', 3, 0)
+INSERT INTO cards VALUES (DEFAULT, 2, 'test_card_2_2', 3, 0, false)
     RETURNING id;
 
 INSERT INTO boards_statuses VALUES(1, 1);
