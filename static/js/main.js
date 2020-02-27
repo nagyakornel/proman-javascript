@@ -1,6 +1,9 @@
 import {dataHandler} from "./data_handler.js";
 
 dataHandler.getBoards(showBoards);
+console.log(document.getElementById('copycard'));
+
+
 
 function showBoards(boards) {
     let i = 0;
@@ -73,12 +76,19 @@ function showBoards(boards) {
 
                     boardColumn.appendChild(boardColumnContent);
                     boardBody.appendChild(boardColumn);
-                    if (i === 6) {
+                    if (i === 5) {
                         console.log('fut');
                         let containerNodes = document.querySelectorAll('.container');
                         let containerArrays = Array.from(containerNodes);
                         console.log(containerArrays);
-                        dragula(containerArrays);
+                        dragula(containerArrays, {
+                            copy: function (el, source) {
+                                return source === document.getElementById('copycard')
+                            },
+                            accepts: function (el, target) {
+                                return target !== document.getElementById('copycard')},
+                            revertOnSpill: true
+                            })
                     }
                     i++;
                 }

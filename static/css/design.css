@@ -7,6 +7,7 @@
 }
 
 body {
+    margin-left: 160px;
     min-width: 620px;
     background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
     font-family: sans-serif;
@@ -58,6 +59,12 @@ section.board {
 
 .board-title, .board-add, .board-toggle {
     display: inline-block;
+}
+
+.sideboard-title {
+    font-size: medium;
+    ;
+    text-align: center;
 }
 
 .board-toggle {
@@ -127,4 +134,25 @@ section.board {
 
 .card-title {
     padding-right: 16px;
+}
+
+.sidenav {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #111; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
 }
