@@ -32,6 +32,7 @@ def get_all_boards(cursor):
     boards = cursor.fetchall()
     return boards
 
+
 @connection.connection_handler
 def get_board_by_id(cursor, board_id):
     cursor.execute("""
@@ -41,6 +42,7 @@ def get_board_by_id(cursor, board_id):
     boards = cursor.fetchall()
     return boards
 
+
 @connection.connection_handler
 def get_status_by_id(cursor, status_id):
     cursor.execute("""
@@ -49,6 +51,7 @@ def get_status_by_id(cursor, status_id):
     """, {'status_id': status_id})
     status = cursor.fetchall()
     return status
+
 
 @connection.connection_handler
 def get_card_by_id(cursor, card_id):
@@ -62,12 +65,10 @@ def get_card_by_id(cursor, card_id):
 
 @connection.connection_handler
 def create_new_card(cursor, card_title, board_id, status_id):
-
     cursor.execute("""
-    INSERT INTO cards (board_id, title, status_id)
-    VALUES (%(board_id)s, %(title)s, %(status_id)s);
+    INSERT INTO cards (board_id, title, status_id,archived)
+    VALUES (%(board_id)s, %(title)s, %(status_id)s, %(archived)s);
     """, {'board_id': board_id, 'title': card_title, 'status_id': status_id})
-
 
     cursor.execute("""
     SELECT * FROM cards
@@ -76,7 +77,8 @@ def create_new_card(cursor, card_title, board_id, status_id):
 
     new_card = cursor.fetchall()
 
-    return  new_card
+    return new_card
+
 
 @connection.connection_handler
 def get_statuses(cursor):
@@ -92,7 +94,7 @@ def get_statuses(cursor):
 def get_cards_by_board(cursor, board_id, status_id):
     cursor.execute("""
                     SELECT * FROM cards
-                    WHERE board_id = %(id)s AND status_id = %(status_id)s;
+                    WHERE board_id = %(id)s AND status_id = %(status_id)s AND archived != false;
                     """, {"id": board_id, "status_id": status_id})
 
     cards = cursor.fetchall()
@@ -114,7 +116,8 @@ def create_board(cursor, board_title):
 
     return board
 
-#creates new status if it doesnt exist
+
+# creates new status if it doesnt exist
 @connection.connection_handler
 def create_status(cursor, statusTitle, boardId):
     cursor.execute("""
@@ -140,6 +143,7 @@ def create_status(cursor, statusTitle, boardId):
     VALUES (%(boardId)s, %(status_id)s);
     """, {'boardId': boardId, 'status_id': status_id})
 
+
 @connection.connection_handler
 def get_status_by_board(cursor, boardId):
     cursor.execute("""
@@ -148,3 +152,63 @@ def get_status_by_board(cursor, boardId):
     """, {'boardId': boardId})
     statuses = cursor.fetchall()
     return statuses
+
+
+@connection.connection_handler
+def edit_card_title(cursor, cardId, newCardTitle):
+    cursor.execute("""
+    UPDATE cards
+    SET title = %(newCardTitle)s
+    WHERE id = %(cardId)s;
+    """, {"newCardTitle": newCardTitle, "cardId": cardId})
+
+
+@connection.connection_handler
+def edit_board_title(cursor, boardId, newBoardTitle):
+    cursor.execute("""
+    UPDATE boards
+    SET title = %(newBoardTitle)s
+    WHERE id = %(boardId)s;
+    """, {"newBoardTitle": newBoardTitle, "boardId": boardId})
+
+
+@connection.connection_handler
+def edit_status_title(cursor, statusId, newStatusTitle):
+    cursor.execute("""
+    UPDATE statuses
+    SET title = %(newStatusTitle)s
+    WHERE id = %(statusId)s;
+    """, {"newStatusTitle": newStatusTitle, "statusId": statusId})
+
+
+@connection.connection_handler
+def delete_card(cursor, cardId):
+    cursor.execute("""
+    DELETE FROM cards
+    WHERE id = %(cardId)s;
+            """, {"cardId": cardId})
+
+
+@connection.connection_handler
+def archive_card(cursor, cardId):
+    cursor.execute("""
+    UPDATE cards
+    SET archived = True
+    WHERE id = %(cardId)s
+            """, {"cardId": cardId})
+
+
+@connection.connection_handler
+def delete_board(cursor, boardId):
+    cursor.execute("""
+    DELETE FROM boards
+    WHERE id = %(boardId)s;
+            """, {"boardId": boardId})
+
+
+@connection.connection_handler
+def delete_status(cursor, statusId):
+    cursor.execute("""
+    DELETE FROM statuses
+    WHERE id = %(statusId)s;
+            """, {"statusId": statusId})

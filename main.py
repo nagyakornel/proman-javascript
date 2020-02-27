@@ -1,9 +1,9 @@
-from flask import Flask, render_template, url_for, request, redirect, send_from_directory, session, escape, jsonify
-from util import json_response
+from flask import Flask, render_template, url_for, request, redirect, session
 
+import SQL_data_manager
 import data_handler
 import util
-import SQL_data_manager
+from util import json_response
 
 app = Flask(__name__)
 # Set the secret key to some random bytes. Keep this really secret!
@@ -15,8 +15,10 @@ def index():
     """
     This is a one-pager which shows all the boards and cards
     """
-    user = "public"
-#    user = session['username']
+    try:
+        user = session['username']
+    except KeyError:
+        user = None
     return render_template('index.html', user=user)
 
 
@@ -26,6 +28,7 @@ def register():
     if request.method == 'POST':
         hashed_password = util.hash_password(request.form['password'])
         SQL_data_manager.register_user(request.form['username'], hashed_password)
+        session['username'] = request.form['username']
         return redirect('/')
     return render_template('register.html')
 
@@ -118,11 +121,11 @@ def get_cards_for_board(board_id: int):
 
 @app.route('/create-card/<cardTitle>/<int:boardId>/<int:statusId>')
 @json_response
-def create_new_card_main(cardTitle, boardId: int, statusId: int):
+def create_new_card_main(cardTitle, boardId: int, statusId: int, archived: bool):
     """
     Creates new card and returns the new cards data
     """
-    return SQL_data_manager.create_new_card(cardTitle, boardId, statusId)
+    return SQL_data_manager.create_new_card(cardTitle, boardId, statusId, archived)
 
 
 @app.route('/create-status/<statusTitle>/<int:boardId>')
@@ -138,6 +141,48 @@ def new_status(statusTitle, boardId: int):
 @json_response
 def get_statuses_by_board(boardId: int):
     return SQL_data_manager.get_status_by_board(boardId)
+
+
+@app.route('/edit-card-title/<cardId>/<newCardTitle>')
+@json_response
+def edit_card_title(cardId: int, newCardTitle):
+    return SQL_data_manager.edit_card_title(cardId, newCardTitle)
+
+
+@app.route('/edit-board-title/<boardId>/<newBoardTitle>')
+@json_response
+def edit_board_title(boardId: int, newBoardTitle):
+    return SQL_data_manager.edit_card_title(boardId, newBoardTitle)
+
+
+@app.route('/edit-status-title/<statusId>/<newStatusTitle>')
+@json_response
+def edit_board_title(statusId: int, newStatusTitle):
+    return SQL_data_manager.edit_card_title(statusId, newStatusTitle)
+
+
+@app.route('/delete-card/<cardId>')
+@json_response
+def delete_card(cardId: int):
+    return SQL_data_manager.delete_card(cardId)
+
+
+@app.route('/archive-card/<cardId>')
+@json_response
+def delete_card(cardId: int):
+    return SQL_data_manager.archive_card(cardId)
+
+
+@app.route('/delete-board/<boardId>')
+@json_response
+def delete_card(boardId: int):
+    return SQL_data_manager.delete_board(boardId)
+
+
+@app.route('/delete-status/<statusId>')
+@json_response
+def delete_card(statusId: int):
+    return SQL_data_manager.delete_status(statusId)
 
 
 def main():
