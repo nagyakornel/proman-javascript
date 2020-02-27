@@ -20,6 +20,11 @@ function showBoards(boards) {
         let boardAdd = document.createElement('button');
         boardAdd.className = 'board-add';
         boardAdd.innerHTML = 'Add Card';
+        let boardShowArchive = document.createElement('button');
+        boardShowArchive.className = 'board-add';
+        boardShowArchive.innerHTML = 'Show archived cards';
+        boardShowArchive.dataset.toggle = 'modal';
+        boardShowArchive.dataset.target = '#modal-' + board.id;
         let boardToggle = document.createElement('button');
         boardToggle.className = 'board-toggle';
         boardToggle.type = 'button';
@@ -30,7 +35,9 @@ function showBoards(boards) {
         boardToggle.appendChild(arrowIcon);
         boardHeader.appendChild(boardTitle);
         boardHeader.appendChild(boardAdd);
+        boardHeader.appendChild(boardShowArchive);
         boardHeader.appendChild(boardToggle);
+
         section.appendChild(boardHeader);
         let boardBody = document.createElement('div');
         boardBody.className = 'board-body row';
@@ -99,6 +106,46 @@ function showBoards(boards) {
 
                 section.appendChild(boardBody);
                 boardContainer.appendChild(section);
+                let modalFade = document.createElement('div');
+                modalFade.className = 'modal fade';
+                modalFade.id = 'modal-' + board.id;
+                modalFade.tabindex = -1;
+                modalFade.role = 'dialog';
+                modalFade.ariaLabelledby = 'modal-title-' + board.id;
+                modalFade.ariaHidden = true;
+                let modalDialog = document.createElement('div');
+                modalDialog.className = 'modal-dialog';
+                modalDialog.role = 'document';
+                let modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+                let modalHeader = document.createElement('div');
+                modalHeader.className = 'modal-header';
+                let modalTitle = document.createElement('h5');
+                modalTitle.className = 'modal-title';
+                modalTitle.id = 'modal-' + board.id;
+                modalTitle.innerHTML = 'Archived cards:';
+                let modalBody = document.createElement('div');
+                modalBody.className = 'modal-body';
+                modalBody.innerHTML = 'Content';
+                let modalFooter = document.createElement('div');
+                modalFooter.className = 'modal-footer';
+                let modalCloseButton = document.createElement('button');
+                modalCloseButton.type = 'button';
+                modalCloseButton.className = 'btn btn-secondary';
+                modalCloseButton.dataset.dismiss = 'modal';
+                modalCloseButton.innerHTML = 'Close';
+
+                modalHeader.appendChild(modalTitle);
+                modalFooter.appendChild(modalCloseButton);
+                modalContent.appendChild(modalHeader);
+                modalContent.appendChild(modalBody);
+                modalContent.appendChild(modalFooter);
+                modalDialog.appendChild(modalContent);
+                modalFade.appendChild(modalDialog);
+                boardContainer.appendChild(modalFade);
+
+
+
                 document.body.appendChild(boardContainer);
             }
         }
@@ -159,6 +206,10 @@ function createBoard(publicity) {
             boardAdd.className = 'board-add';
             boardAdd.innerHTML = 'Add Card';
             boardHeader.appendChild(boardAdd);
+            let boardShowArchive = document.createElement('button');
+            boardShowArchive.className = 'board-add';
+            boardShowArchive.innerHTML = 'Show archived cards';
+            boardHeader.appendChild(boardShowArchive);
             let boardToggle = document.createElement('button');
             boardToggle.className = 'board-toggle';
             boardToggle.type = 'button';
