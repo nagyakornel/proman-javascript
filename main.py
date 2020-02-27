@@ -15,17 +15,19 @@ def index():
     """
     This is a one-pager which shows all the boards and cards
     """
-    user = "public"
-#    user = session['username']
+    try:
+        user = session['username']
+    except KeyError:
+        user = None
     return render_template('index.html', user=user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    print("works")
     if request.method == 'POST':
         hashed_password = util.hash_password(request.form['password'])
         SQL_data_manager.register_user(request.form['username'], hashed_password)
+        session['username'] = request.form['username']
         return redirect('/')
     return render_template('register.html')
 
@@ -58,7 +60,12 @@ def get_boards():
     """
     All the boards
     """
-    return SQL_data_manager.get_all_boards()
+    try:
+        user = session['username']
+        user_id = SQL_data_manager.get_user_id_by_username(user)
+    except KeyError:
+        user_id = 0
+    return SQL_data_manager.get_all_boards(user_id)
 
 
 @app.route("/get-board-by-id/<int:board_id>")
@@ -94,10 +101,16 @@ def get_statuses():
     return SQL_data_manager.get_statuses()
 
 
-@app.route("/create-new-board/<board_title>")
+@app.route("/create-new-board/<board_title>/<publicity>")
 @json_response
-def create_board(board_title: str):
-    return SQL_data_manager.create_board(board_title)
+def create_board(board_title: str, publicity):
+    try:
+        user = session['username']
+        user_id = SQL_data_manager.get_user_id_by_username(user)
+    except KeyError:
+        user_id = 1
+
+    return SQL_data_manager.create_board(board_title, publicity, user_id)
 
 
 @app.route("/get-cards-by-board/<int:board_id>/<int:status_id>")

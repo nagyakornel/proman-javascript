@@ -66,9 +66,9 @@ export let dataHandler = {
             callback(response);
         });
     },
-    createNewBoard: function (boardTitle, callback) {
+    createNewBoard: function (boardTitle, publicity, callback) {
         // creates new board, saves it and calls the callback function with its data
-        this._api_get('/create-new-board/' + boardTitle, (response) => {
+        this._api_get('/create-new-board/' + boardTitle + '/' + publicity, (response) => {
             this._data = response;
             callback(response);
         });

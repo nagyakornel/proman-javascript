@@ -19,6 +19,10 @@
 </head>
 <body>
 {{ user }}
+<button type="button" id="create-public-board">New Public Board</button>
+{% if user != Nones %}
+    <button type="button" id="create-private-board">New Private Board</button>
+{%  endif %}
 <div class="sidenav">
     <div class="board-container">
         <section class="board">
