@@ -4,6 +4,7 @@ dataHandler.getBoards(showBoards);
 
 function showBoards(boards) {
     let i = 0;
+    let x = 0;
     for (let board of boards) {
         let boardContainer = document.createElement('div');
         boardContainer.className = 'board-container';
@@ -34,6 +35,7 @@ function showBoards(boards) {
         dataHandler.getStatusesByBoard(board.id, showStatuses);
 
         function showStatuses(statusIDs) {
+            x = x + statusIDs.length;
             for (let statusID of statusIDs) {
                 dataHandler.getStatus(statusID.status_id, callStatus);
 
@@ -73,7 +75,7 @@ function showBoards(boards) {
 
                     boardColumn.appendChild(boardColumnContent);
                     boardBody.appendChild(boardColumn);
-                    if (i === 6) {
+                    if (i === x-1) {
                         console.log('fut');
                         let containerNodes = document.querySelectorAll('.container');
                         let containerArrays = Array.from(containerNodes);
