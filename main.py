@@ -157,7 +157,7 @@ def edit_board_title(boardId: int, newBoardTitle):
 
 @app.route('/edit-status-title/<statusId>/<newStatusTitle>')
 @json_response
-def edit_board_title(statusId: int, newStatusTitle):
+def edit_status_title(statusId: int, newStatusTitle):
     return SQL_data_manager.edit_card_title(statusId, newStatusTitle)
 
 
@@ -169,19 +169,19 @@ def delete_card(cardId: int):
 
 @app.route('/archive-card/<cardId>')
 @json_response
-def delete_card(cardId: int):
+def archive_card(cardId: int):
     return SQL_data_manager.archive_card(cardId)
 
 
 @app.route('/delete-board/<boardId>')
 @json_response
-def delete_card(boardId: int):
+def delete_board(boardId: int):
     return SQL_data_manager.delete_board(boardId)
 
 
 @app.route('/delete-status/<statusId>')
 @json_response
-def delete_card(statusId: int):
+def delete_status(statusId: int):
     return SQL_data_manager.delete_status(statusId)
 
 
