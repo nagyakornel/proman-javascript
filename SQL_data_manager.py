@@ -25,12 +25,14 @@ def get_user_password(cursor, user_name):
 
 
 @connection.connection_handler
-def get_all_boards(cursor):
+def get_all_boards(cursor, user_id):
     cursor.execute("""
-    SELECT * FROM boards;
-    """)
+    SELECT * FROM boards
+    WHERE public = true OR user_id = %(user_id)s;
+    """, {'user_id': user_id})
     boards = cursor.fetchall()
     return boards
+
 
 @connection.connection_handler
 def get_board_by_id(cursor, board_id):
@@ -41,6 +43,7 @@ def get_board_by_id(cursor, board_id):
     boards = cursor.fetchall()
     return boards
 
+
 @connection.connection_handler
 def get_status_by_id(cursor, status_id):
     cursor.execute("""
@@ -49,6 +52,7 @@ def get_status_by_id(cursor, status_id):
     """, {'status_id': status_id})
     status = cursor.fetchall()
     return status
+
 
 @connection.connection_handler
 def get_card_by_id(cursor, card_id):
@@ -62,12 +66,10 @@ def get_card_by_id(cursor, card_id):
 
 @connection.connection_handler
 def create_new_card(cursor, card_title, board_id, status_id):
-
     cursor.execute("""
     INSERT INTO cards (board_id, title, status_id)
     VALUES (%(board_id)s, %(title)s, %(status_id)s);
     """, {'board_id': board_id, 'title': card_title, 'status_id': status_id})
-
 
     cursor.execute("""
     SELECT * FROM cards
@@ -76,7 +78,8 @@ def create_new_card(cursor, card_title, board_id, status_id):
 
     new_card = cursor.fetchall()
 
-    return  new_card
+    return new_card
+
 
 @connection.connection_handler
 def get_statuses(cursor):
@@ -100,11 +103,11 @@ def get_cards_by_board(cursor, board_id, status_id):
 
 
 @connection.connection_handler
-def create_board(cursor, board_title):
+def create_board(cursor, board_title, publicity, user_id):
     cursor.execute("""
                     INSERT INTO boards(title,user_id,public)
                     VALUES (%(title)s,%(user_id)s,%(public)s);
-                    """, {"title": board_title, "used_id": 1, "public": True})
+                    """, {"title": board_title, "user_id": user_id, "public": publicity})
     cursor.execute("""
                     SELECT * FROM boards
                     WHERE title = %(title)s;
@@ -112,9 +115,19 @@ def create_board(cursor, board_title):
 
     board = cursor.fetchall()
 
+    def columns_to_new_boards(status_id):
+        cursor.execute("""
+        INSERT INTO boards_statuses (board_id, status_id) 
+        VALUES (%(board_id)s, %(status_id)s);
+        """, {'board_id': board[0]['id'], 'status_id': status_id})
+
+    for i in range(1, 5):
+        columns_to_new_boards(i)
+
     return board
 
-#creates new status if it doesnt exist
+
+# creates new status if it doesnt exist
 @connection.connection_handler
 def create_status(cursor, statusTitle, boardId):
     cursor.execute("""
@@ -140,6 +153,7 @@ def create_status(cursor, statusTitle, boardId):
     VALUES (%(boardId)s, %(status_id)s);
     """, {'boardId': boardId, 'status_id': status_id})
 
+
 @connection.connection_handler
 def get_status_by_board(cursor, boardId):
     cursor.execute("""
@@ -148,3 +162,14 @@ def get_status_by_board(cursor, boardId):
     """, {'boardId': boardId})
     statuses = cursor.fetchall()
     return statuses
+
+
+@connection.connection_handler
+def get_user_id_by_username(cursor, username):
+    cursor.execute("""
+    SELECT * FROM users
+    WHERE user_name = %(username)s;
+    """, {'username': username})
+
+    user = cursor.fetchall()
+    return user[0]['id']
