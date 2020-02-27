@@ -41,7 +41,6 @@ def login():
         if user_hashed_password is not None:
             if util.validate_password(plain_text_password, user_hashed_password):
                 session['username'] = user_name
-                print(session)
         return redirect('/')
     return render_template('login.html')
 
@@ -50,7 +49,6 @@ def login():
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
-    print(session)
     return redirect('/')
 
 
