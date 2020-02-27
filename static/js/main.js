@@ -1,7 +1,7 @@
 import {dataHandler} from "./data_handler.js";
 
 dataHandler.getBoards(showBoards);
-console.log(document.getElementById('copycard'));
+
 
 
 
@@ -20,7 +20,34 @@ function showBoards(boards) {
         boardTitle.className = 'board-title';
         let boardAdd = document.createElement('button');
         boardAdd.className = 'board-add';
-        boardAdd.innerHTML = 'Add Card';
+        boardAdd.innerHTML = 'Add Column';
+        boardAdd.addEventListener('click', function () {
+            console.log('lefutok')
+            let boardColumn = document.createElement('div');
+            boardColumn.className = 'board-column col collapse multi-collapse' + board.id + ' show';
+            let boardColumnTitle = document.createElement('input')
+            boardColumnTitle.addEventListener('blur', function () {
+                dataHandler.addNewStatus(boardColumnTitle.value, board.id, newColumnCallback)
+                function newColumnCallback(data) {
+                    console.log(data)
+                    boardColumn.removeChild(boardColumnTitle)
+                    let newBoardTitle = document.createElement('div');
+                    newBoardTitle.className = 'board-column-title';
+                    newBoardTitle.innerHTML = boardColumnTitle.value;
+                    boardColumn.appendChild(newBoardTitle)
+                    let boardColumnContent = document.createElement('div');
+                    boardColumnContent.className = 'board-column-content container';
+                    boardColumn.appendChild(boardColumnContent);
+                    boardColumnContent.id = `dragula-${board.id}-${data}`;
+                }
+            })
+
+            boardColumn.appendChild(boardColumnTitle);
+
+            boardColumn.appendChild(boardColumnTitle);
+            boardBody.appendChild(boardColumn);
+            console.log(boardBody)
+        })
         let boardToggle = document.createElement('button');
         boardToggle.className = 'board-toggle';
         boardToggle.type = 'button';
@@ -79,10 +106,8 @@ function showBoards(boards) {
                     boardColumn.appendChild(boardColumnContent);
                     boardBody.appendChild(boardColumn);
                     if (i === x-1) {
-                        console.log('fut');
                         let containerNodes = document.querySelectorAll('.container');
                         let containerArrays = Array.from(containerNodes);
-                        console.log(containerArrays);
                         dragula(containerArrays, {
                             copy: function (el, source) {
                                 return source === document.getElementById('copycard')
@@ -129,14 +154,12 @@ function createBoard(publicity) {
         let saveButton = document.createElement('button');
         saveButton.innerText = 'Save';
         boardTitle.addEventListener('blur', function () {
-            console.log('blur')
             let newBoardTitle = 'New board'
             if (boardTitle.value) {
                 newBoardTitle = boardTitle.value
             }
             dataHandler.createNewBoard(newBoardTitle, publicity, getNewBoard)
             function getNewBoard(data) {
-                console.log(data)
                 let newBoardTitle = document.createElement('span');
                 newBoardTitle.innerHTML = data[0].title;
                 newBoardTitle.className = 'board-title';
@@ -146,7 +169,34 @@ function createBoard(publicity) {
                 boardHeader.appendChild(newBoardTitle);
                 let boardAdd = document.createElement('button');
                 boardAdd.className = 'board-add';
-                boardAdd.innerHTML = 'Add Card';
+                boardAdd.innerHTML = 'Add Column';
+
+                boardAdd.addEventListener('click', function () {
+                    console.log('lefutok')
+                    let boardColumn = document.createElement('div');
+                    boardColumn.className = 'board-column col collapse multi-collapse' + data[0].id + ' show';
+                    let boardColumnTitle = document.createElement('input')
+                    boardColumnTitle.addEventListener('blur', function () {
+                        dataHandler.addNewStatus(boardColumnTitle.value, data[0].id, newColumnCallback);
+                    })
+
+                        function newColumnCallback(data) {
+                            console.log(data);
+                            boardColumn.removeChild(boardColumnTitle);
+                            let newBoardTitle = document.createElement('div');
+                            newBoardTitle.className = 'board-column-title';
+                            newBoardTitle.innerHTML = boardColumnTitle.value;
+                            boardColumn.appendChild(newBoardTitle);
+                            let boardColumnContent = document.createElement('div');
+                            boardColumnContent.className = 'board-column-content container';
+                            boardColumn.appendChild(boardColumnContent);
+                            boardColumnContent.id = `dragula-${data[0].id}-${data}`;
+                        }
+                    });
+
+
+
+
                 boardHeader.appendChild(boardAdd);
                 let boardToggle = document.createElement('button');
                 boardToggle.className = 'board-toggle';
@@ -191,6 +241,7 @@ function createBoard(publicity) {
 
 
 }
+
 
 
 /*

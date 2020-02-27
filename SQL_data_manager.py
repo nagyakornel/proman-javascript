@@ -135,7 +135,7 @@ def create_status(cursor, statusTitle, boardId):
     WHERE title = %(statusTitle)s;
     """, {'statusTitle': statusTitle})
     existing_status = cursor.fetchall()
-    status_id = existing_status[0]['id']
+
     if len(existing_status) == 0:
         cursor.execute("""
         INSERT INTO statuses (title)
@@ -147,11 +147,15 @@ def create_status(cursor, statusTitle, boardId):
         """, {'statusTitle': statusTitle})
         new_status = cursor.fetchall()
         status_id = new_status[0]['id']
+    else:
+        status_id = existing_status[0]['id']
 
     cursor.execute("""
     INSERT INTO boards_statuses (board_id, status_id)
     VALUES (%(boardId)s, %(status_id)s);
     """, {'boardId': boardId, 'status_id': status_id})
+
+    return status_id
 
 
 @connection.connection_handler
