@@ -1,7 +1,8 @@
 import {dataHandler} from "./data_handler.js";
 
+
+
 dataHandler.getBoards(showBoards);
-console.log(document.getElementById('copycard'));
 
 
 function showBoards(boards) {
@@ -78,10 +79,8 @@ function showBoards(boards) {
                     boardColumn.appendChild(boardColumnContent);
                     boardBody.appendChild(boardColumn);
                     if (i === x - 1) {
-                        console.log('fut');
                         let containerNodes = document.querySelectorAll('.container');
-                        let containerArrays = Array.from(containerNodes);
-                        console.log(containerArrays);
+                        window.containerArrays = Array.from(containerNodes);
                         dragula(containerArrays, {
                             copy: function (el, source) {
                                 return source === document.getElementById('copycard')
@@ -118,6 +117,7 @@ function createBoard(publicity) {
 
     let boardContainer = document.createElement('div');
     boardContainer.className = 'board-container';
+
     let section = document.createElement('section');
     section.className = 'board';
     let boardHeader = document.createElement('div');
@@ -140,7 +140,6 @@ function createBoard(publicity) {
         dataHandler.createNewBoard(newBoardTitle, publicity, getNewBoard)
 
         function getNewBoard(data) {
-            console.log(data)
             let newBoardTitle = document.createElement('span');
             newBoardTitle.innerHTML = data[0].title;
             newBoardTitle.className = 'board-title';
@@ -167,6 +166,7 @@ function createBoard(publicity) {
             }
 
             function columnsForNewBoards(columnTitle, statusIndex) {
+
                 let boardColumn = document.createElement('div');
                 boardColumn.className = 'board-column col collapse multi-collapse' + data[0].id;
                 let boardColumnTitle = document.createElement('div');
@@ -175,25 +175,14 @@ function createBoard(publicity) {
                 boardColumn.appendChild(boardColumnTitle);
                 let boardColumnContent = document.createElement('div');
                 boardColumnContent.className = 'board-column-content container';
-
                 boardColumnContent.id = `dragula-${data[0].id}-${statusIndex}`;
-
                 boardColumn.appendChild(boardColumnTitle);
                 boardColumn.appendChild(boardColumnContent);
                 boardBody.appendChild(boardColumn);
                 section.appendChild(boardBody);
-                console.log('hh')
+                createNewDragula()
+
             }
-
-
-            for (let i = 1; i < 5; i++) {
-                console.log('elindul')
-                console.log(document.getElementById(`dragula-${data[0].id}-${i}`))
-                dragula(document.getElementById(`dragula-${data[0].id}-${i}`), {
-                    revertOnSpill: true
-                })
-            }
-
         }
     });
     boardHeader.appendChild(boardTitle);
@@ -204,8 +193,25 @@ function createBoard(publicity) {
     boardContainer.appendChild(section);
     document.body.appendChild(boardContainer);
 
-
 }
+
+
+let counter = 1
+function createNewDragula() {
+    let calc = counter%4
+    if (calc !== 0){
+        counter++
+    } else {
+        let allColumns = document.querySelectorAll('.container')
+        let allColumnsArrays = Array.from(allColumns);
+        counter++
+        for (let i = 1; i < 5; i++) {
+            window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
+        }
+    }
+}
+
+
 
 
 /*
