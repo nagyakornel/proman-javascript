@@ -164,7 +164,7 @@ function createBoard(publicity) {
             for (let i = 0; i < columnTitles.length; i++) {
                 columnsForNewBoards(columnTitles[i], i + 1)
             }
-
+            createNewDragula()
             function columnsForNewBoards(columnTitle, statusIndex) {
 
                 let boardColumn = document.createElement('div');
@@ -180,7 +180,7 @@ function createBoard(publicity) {
                 boardColumn.appendChild(boardColumnContent);
                 boardBody.appendChild(boardColumn);
                 section.appendChild(boardBody);
-                createNewDragula()
+
 
             }
         }
@@ -196,19 +196,13 @@ function createBoard(publicity) {
 }
 
 
-let counter = 1
+
 function createNewDragula() {
-    let calc = counter%4
-    if (calc !== 0){
-        counter++
-    } else {
         let allColumns = document.querySelectorAll('.container')
         let allColumnsArrays = Array.from(allColumns);
-        counter++
-        for (let i = 1; i < 5; i++) {
+         for (let i = 1; i < 5; i++) {
             window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
         }
-    }
 }
 
 
