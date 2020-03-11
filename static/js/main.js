@@ -1,7 +1,6 @@
 import {dataHandler} from "./data_handler.js";
 
 
-
 dataHandler.getBoards(showBoards);
 
 
@@ -48,6 +47,7 @@ function showBoards(boards) {
                     let boardColumnTitle = document.createElement('div');
                     boardColumnTitle.className = 'board-column-title';
                     boardColumnTitle.innerHTML = tempStatus[0].title;
+                    boardColumnTitle.addEventListener('dblclick', renameStatus);
                     boardColumn.appendChild(boardColumnTitle);
                     let boardColumnContent = document.createElement('div');
                     boardColumnContent.className = 'board-column-content container';
@@ -165,6 +165,7 @@ function createBoard(publicity) {
                 columnsForNewBoards(columnTitles[i], i + 1)
             }
             createNewDragula()
+
             function columnsForNewBoards(columnTitle, statusIndex) {
 
                 let boardColumn = document.createElement('div');
@@ -172,6 +173,7 @@ function createBoard(publicity) {
                 let boardColumnTitle = document.createElement('div');
                 boardColumnTitle.className = 'board-column-title';
                 boardColumnTitle.innerHTML = columnTitle;
+                boardColumnTitle.addEventListener('dblclick', renameStatus);
                 boardColumn.appendChild(boardColumnTitle);
                 let boardColumnContent = document.createElement('div');
                 boardColumnContent.className = 'board-column-content container';
@@ -180,8 +182,6 @@ function createBoard(publicity) {
                 boardColumn.appendChild(boardColumnContent);
                 boardBody.appendChild(boardColumn);
                 section.appendChild(boardBody);
-
-
             }
         }
     });
@@ -192,74 +192,30 @@ function createBoard(publicity) {
     boardBody.className = 'board-body row';
     boardContainer.appendChild(section);
     document.body.appendChild(boardContainer);
-
 }
-
-
 
 function createNewDragula() {
-        let allColumns = document.querySelectorAll('.container')
-        let allColumnsArrays = Array.from(allColumns);
-         for (let i = 1; i < 5; i++) {
-            window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
-        }
+    let allColumns = document.querySelectorAll('.container')
+    let allColumnsArrays = Array.from(allColumns);
+    for (let i = 1; i < 5; i++) {
+        window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
+    }
 }
 
+function renameStatus(t) {
+    let originalStatus = t.target.innerHTML;
+    let input = document.createElement('input');
+    input.value = originalStatus;
+    input.addEventListener('keyup', displayStatus);
+    input.setAttribute('data-original', originalStatus);
+    t.target.innerHTML = '';
+    t.target.appendChild(input);
+}
 
-
-
-/*
-<div class="board-container">
-    <section class="board">
-        <div class="board-header"><span class="board-title">Board 1</span>
-            <button class="board-add">Add Card</button>
-            <button class="board-toggle" type="button" data-toggle="collapse"
-                    data-target=".multi-collapse"
-                    aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"><i
-                    class="fas fa-chevron-down"></i>
-            </button>
-        </div>
-        <div class="board-body row">
-            <div class="board-column col collapse multi-collapse" id="multiCollapseExample1">
-                <div class="board-column-title">New</div>
-                <div class="board-column-content container" id="left-defaults">
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">Card 1</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">Card 2</div>
-                    </div>
-                </div>
-            </div>
-            <div class="board-column col collapse multi-collapse" id="multiCollapseExample1">
-                <div class="board-column-title">In Progress</div>
-                <div class="board-column-content container" id="middle-defaults">
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">Card 4</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">Card 5</div>
-                    </div>
-                </div>
-            </div>
-            <div class="board-column col collapse multi-collapse" id="multiCollapseExample1">
-                <div class="board-column-title">In Progress</div>
-                <div class="board-column-content container" id="right-defaults">
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">Card 1</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">Card 2</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-*/
+function displayStatus(t) {
+    if (t.which === 13){ // 13 = Enter key
+        t.target.parentNode.innerHTML = t.target.value;
+    } else if (t.which === 27){ // 27 = Esc key
+        t.target.parentNode.innerHTML = t.target.getAttribute('data-original');
+    }
+}
