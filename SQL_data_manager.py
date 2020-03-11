@@ -245,3 +245,13 @@ def is_archived(cursor, cardId):
     archived = cursor.fetchall()
 
     return archived
+
+
+@connection.connection_handler
+def get_status_id(cursor, status_title):
+    cursor.execute("""
+    SELECT id
+    FROM statuses
+    WHERE title LIKE %(status_title)s
+    """, {"status_title": status_title})
+    return cursor.fetchall()
