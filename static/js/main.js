@@ -17,6 +17,7 @@ function showBoards(boards) {
         let boardTitle = document.createElement('span');
         boardTitle.innerHTML = board.title;
         boardTitle.className = 'board-title';
+        boardTitle.addEventListener('dblclick', renameStatus);
         let boardAdd = document.createElement('button');
         boardAdd.className = 'board-add';
         boardAdd.innerHTML = 'Add Card';
@@ -127,6 +128,7 @@ function createBoard(publicity) {
     let boardTitle = document.createElement('input');
     boardTitle.setAttribute('type', 'text');
     boardTitle.setAttribute('placeholder', 'New board');
+    boardTitle.addEventListener('dblclick', renameStatus);
     boardTitle.className = 'board-title';
     boardTitle.setAttribute('id', 'newboardtitle');
     let saveButton = document.createElement('button');
@@ -213,9 +215,9 @@ function renameStatus(t) {
 }
 
 function displayStatus(t) {
-    if (t.which === 13){ // 13 = Enter key
+    if (t.which === 13) { // 13 = Enter key
         t.target.parentNode.innerHTML = t.target.value;
-    } else if (t.which === 27){ // 27 = Esc key
+    } else if (t.which === 27) { // 27 = Esc key
         t.target.parentNode.innerHTML = t.target.getAttribute('data-original');
     }
 }
