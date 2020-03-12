@@ -99,9 +99,10 @@ function showBoards(boards) {
                                 return target !== document.getElementById('copycard')
                             },
                             revertOnSpill: true
-                        })
+                        }, addBoardEventListener())
                     }
                     i++;
+
                 }
 
                 section.appendChild(boardBody);
@@ -110,7 +111,6 @@ function showBoards(boards) {
             }
         }
     }
-
 }
 
 let createNewPublicBoard = document.getElementById('create-public-board');
@@ -219,6 +219,7 @@ function createNewDragula() {
     for (let i = 1; i < 5; i++) {
         window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
     }
+    addBoardEventListener()
 }
 
 function renameStatus(t) {
@@ -245,3 +246,46 @@ function saveBoardTitle(t) {
     console.log('saved?')
 }
 
+let archiveColumn = document.getElementById('archive-column')
+archiveColumn.addEventListener('DOMNodeInserted', addTrashcan)
+
+function addTrashcan() {
+    let archiveCards = document.getElementById('archive-column').childNodes;
+    for (let i=1; i<archiveCards.length; i++) {
+        console.log(archiveCards[i].innerHTML)
+        if (archiveCards[i].innerHTML.includes('<div class="card-remove"><i class="fas fa-trash-alt"></i></div>')){
+            console.log(true)
+        } else {
+            let cardToChange = archiveCards[i]
+            let currentInnerHTML = archiveCards[i].innerHTML
+            cardToChange.innerHTML = `<div class="card-remove"><i class="fas fa-trash-alt"></i></div>`
+            cardToChange.innerHTML += currentInnerHTML
+        }
+    }
+    let deleteListeners = document.getElementsByClassName("card-remove")
+    for (let i=0; i<deleteListeners.length; i++){
+        deleteListeners[i].addEventListener('click', deleteCard)
+    }
+}
+
+function addBoardEventListener() {
+    let mainBoard = document.getElementsByClassName('board-column col collapse');
+    console.log(mainBoard)
+    for (let i = 0; i < mainBoard.length; i++) {
+        mainBoard[i].addEventListener('DOMNodeInserted', removeTrashcan)
+        }
+}
+
+function removeTrashcan(e){
+    console.log(e.target.firstElementChild)
+    if (e.target.firstElementChild.outerHTML === '<div class="card-remove"><i class="fas fa-trash-alt"></i></div>'){
+        console.log(e.target.innerHTML)
+        console.log(e.target.innerHTML.length)
+        let newInnerHTML = e.target.innerHTML.slice(63, e.target.innerHTML.length)
+        e.target.innerHTML = newInnerHTML
+    }
+}
+
+function deleteCard(){
+    this.parentNode.parentNode.removeChild(this.parentNode)
+}
