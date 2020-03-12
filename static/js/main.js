@@ -49,6 +49,8 @@ function showBoards(boards) {
                     let boardColumnTitle = document.createElement('div');
                     boardColumnTitle.className = 'board-column-title';
                     boardColumnTitle.innerHTML = tempStatus[0].title;
+                    boardColumnTitle.setAttribute('data-status-id', statusID.status_id);
+                    boardColumnTitle.setAttribute('data-board-id', board.id);
                     boardColumnTitle.addEventListener('dblclick', renameStatus);
                     boardColumn.appendChild(boardColumnTitle);
                     let boardColumnContent = document.createElement('div');
@@ -69,6 +71,7 @@ function showBoards(boards) {
                                     let cardTitle = document.createElement('div');
                                     cardTitle.className = 'card-title';
                                     cardTitle.innerHTML = cards[lists][element];
+                                    cardTitle.setAttribute('data-card-id', cards[lists]['id']);
                                     cardTitle.addEventListener('dblclick', renameStatus);
                                     cardRemove.appendChild(cardRemoveButton);
                                     card.appendChild(cardRemove);
@@ -218,14 +221,21 @@ function renameStatus(t) {
 
 function displayStatus(t) {
     if (t.which === 13) { // 13 = Enter key
-        let boardId = t.target.parentNode.getAttribute('data-board-id');
-        dataHandler.editBoardTitle(boardId, t.target.value, saveBoardTitle);
+        if (t.target.parentNode.hasAttribute('data-card-id')){
+            let cardId = t.target.parentNode.getAttribute('data-card-id');
+            dataHandler.editCardTitle(cardId, t.target.value);
+        } else if (t.target.parentNode.hasAttribute('data-status-id')) {
+            let boardId = t.target.parentNode.getAttribute('data-board-id');
+            let oldStatusId = t.target.parentNode.getAttribute('data-status-id');
+            dataHandler.deleteStatusFromBoard(boardId, oldStatusId);
+            dataHandler.addNewStatus(boardId, t.target.value);
+            dataHandler.updateStatusOfCards(boardId, oldStatusId, t.target.value);
+        } else if (t.target.parentNode.hasAttribute('data-board-id')) {
+            let boardId = t.target.parentNode.getAttribute('data-board-id');
+            dataHandler.editBoardTitle(boardId, t.target.value);
+        }
         t.target.parentNode.innerHTML = t.target.value;
     } else if (t.which === 27) { // 27 = Esc key
         t.target.parentNode.innerHTML = t.target.getAttribute('data-original');
     }
-}
-
-function saveBoardTitle(t){
-    console.log('saved?')
 }

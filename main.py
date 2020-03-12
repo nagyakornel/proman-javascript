@@ -41,7 +41,6 @@ def login():
         if user_hashed_password is not None:
             if util.validate_password(plain_text_password, user_hashed_password):
                 session['username'] = user_name
-                print(session)
         return redirect('/')
     return render_template('login.html')
 
@@ -50,7 +49,6 @@ def login():
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
-    print(session)
     return redirect('/')
 
 
@@ -138,7 +136,7 @@ def create_new_card_main(cardTitle, boardId: int, statusId: int):
     return SQL_data_manager.create_new_card(cardTitle, boardId, statusId)
 
 
-@app.route('/create-status/<statusTitle>/<int:boardId>')
+@app.route('/create-status/<int:boardId>/<statusTitle>')
 @json_response
 def new_status(statusTitle, boardId: int):
     """
@@ -168,7 +166,7 @@ def edit_board_title(boardId: int, newBoardTitle):
 @app.route('/edit-status-title/<statusId>/<newStatusTitle>')
 @json_response
 def edit_status_title(statusId: int, newStatusTitle):
-    return SQL_data_manager.edit_card_title(statusId, newStatusTitle)
+    return SQL_data_manager.edit_status_title(statusId, newStatusTitle)
 
 
 @app.route('/delete-card/<cardId>')
@@ -199,6 +197,19 @@ def delete_status(statusId: int):
 @json_response
 def is_archived(cardId: int):
     return SQL_data_manager.is_archived(cardId)
+
+
+@app.route('/delete-status-from-board/<board_id>/<status_id>')
+@json_response
+def delete_status_from_board(board_id, status_id):
+    return SQL_data_manager.delete_status_from_board(board_id, status_id)
+
+
+@app.route('/update-status-of-cards/<board_id>/<old_status_id>/<status_title>')
+@json_response
+def update_status_of_cards(board_id, old_status_id, status_title):
+    new_status_id = SQL_data_manager.get_status_id_by_title(status_title)[0]['id']
+    return SQL_data_manager.update_status_of_cards(board_id, old_status_id, new_status_id)
 
 
 def main():
