@@ -68,6 +68,7 @@ function showBoards(boards) {
                                     let cardTitle = document.createElement('div');
                                     cardTitle.className = 'card-title';
                                     cardTitle.innerHTML = cards[lists][element];
+                                    cardTitle.addEventListener('dblclick', renameStatus);
                                     cardRemove.appendChild(cardRemoveButton);
                                     card.appendChild(cardRemove);
                                     card.appendChild(cardTitle);
