@@ -17,6 +17,7 @@ function showBoards(boards) {
         let boardTitle = document.createElement('span');
         boardTitle.innerHTML = board.title;
         boardTitle.className = 'board-title';
+        boardTitle.setAttribute('data-board-id', board.id);
         boardTitle.addEventListener('dblclick', renameStatus);
         let boardAdd = document.createElement('button');
         boardAdd.className = 'board-add';
@@ -68,6 +69,7 @@ function showBoards(boards) {
                                     let cardTitle = document.createElement('div');
                                     cardTitle.className = 'card-title';
                                     cardTitle.innerHTML = cards[lists][element];
+                                    cardTitle.addEventListener('dblclick', renameStatus);
                                     cardRemove.appendChild(cardRemoveButton);
                                     card.appendChild(cardRemove);
                                     card.appendChild(cardTitle);
@@ -197,7 +199,7 @@ function createBoard(publicity) {
 }
 
 function createNewDragula() {
-    let allColumns = document.querySelectorAll('.container')
+    let allColumns = document.querySelectorAll('.container');
     let allColumnsArrays = Array.from(allColumns);
     for (let i = 1; i < 5; i++) {
         window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
@@ -216,8 +218,14 @@ function renameStatus(t) {
 
 function displayStatus(t) {
     if (t.which === 13) { // 13 = Enter key
+        let boardId = t.target.parentNode.getAttribute('data-board-id');
+        dataHandler.editBoardTitle(boardId, t.target.value, saveBoardTitle);
         t.target.parentNode.innerHTML = t.target.value;
     } else if (t.which === 27) { // 27 = Esc key
         t.target.parentNode.innerHTML = t.target.getAttribute('data-original');
     }
+}
+
+function saveBoardTitle(t){
+    console.log('saved?')
 }
