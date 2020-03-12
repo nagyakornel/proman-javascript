@@ -3,6 +3,11 @@ import {dataHandler} from "./data_handler.js";
 
 dataHandler.getBoards(showBoards);
 
+let copyCards = document.getElementsByClassName('card-title')
+for (let i=0; i<copyCards.length; i++){
+    copyCards[i].addEventListener('dblclick', renameStatus)
+}
+
 
 function showBoards(boards) {
     let i = 0;
@@ -71,17 +76,11 @@ function showBoards(boards) {
                                 if (element === 'title') {
                                     let card = document.createElement('div');
                                     card.className = 'card';
-                                    let cardRemove = document.createElement('div');
-                                    cardRemove.className = 'card-remove';
-                                    let cardRemoveButton = document.createElement('i');
-                                    cardRemoveButton.className = 'fas fa-trash-alt';
                                     let cardTitle = document.createElement('div');
                                     cardTitle.className = 'card-title';
                                     cardTitle.innerHTML = cards[lists][element];
                                     cardTitle.setAttribute('data-card-id', cards[lists]['id']);
                                     cardTitle.addEventListener('dblclick', renameStatus);
-                                    cardRemove.appendChild(cardRemoveButton);
-                                    card.appendChild(cardRemove);
                                     card.appendChild(cardTitle);
                                     boardColumnContent.appendChild(card);
                                 }
@@ -102,7 +101,7 @@ function showBoards(boards) {
                                 return target !== document.getElementById('copycard')
                             },
                             revertOnSpill: true
-                        })
+                        }, addBoardEventListener())
                     }
                     i++;
                 }
@@ -222,10 +221,12 @@ function createNewDragula() {
     for (let i = 1; i < 5; i++) {
         window.containerArrays.push(allColumnsArrays[allColumnsArrays.length - i]);
     }
+    addBoardEventListener()
 }
 
 function renameStatus(t) {
     let originalStatus = t.target.innerHTML;
+    console.log(t.target)
     let input = document.createElement('input');
     input.value = originalStatus;
     input.addEventListener('keyup', displayStatus);
@@ -252,5 +253,25 @@ function displayStatus(t) {
         t.target.parentNode.innerHTML = t.target.value;
     } else if (t.which === 27) { // 27 = Esc key
         t.target.parentNode.innerHTML = t.target.getAttribute('data-original');
+    }
+}
+
+function addBoardEventListener() {
+    let mainBoard = document.getElementsByClassName('board-column col collapse');
+    console.log(mainBoard)
+    for (let i = 0; i < mainBoard.length; i++) {
+        console.log(mainBoard[i])
+        mainBoard[i].addEventListener('DOMNodeInserted', removeTrashcan)
+        }
+}
+
+function removeTrashcan(e){
+    console.log("trashcan_init")
+    console.log(e.target.firstElementChild)
+    if (e.target.firstElementChild.outerHTML === '<div class="card-remove"><i class="fas fa-trash-alt"></i></div>'){
+        console.log(e.target.innerHTML)
+        console.log(e.target.innerHTML.length)
+        let newInnerHTML = e.target.innerHTML.slice(63, e.target.innerHTML.length)
+        e.target.innerHTML = newInnerHTML
     }
 }
