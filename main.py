@@ -207,6 +207,12 @@ def delete_status_from_board(board_id, status_id):
     return SQL_data_manager.delete_status_from_board(board_id, status_id)
 
 
+@app.route('/update-status-of-cards/<board_id>/<old_status_id>/<status_title>')
+@json_response
+def update_status_of_cards(board_id, old_status_id, status_title):
+    new_status_id = SQL_data_manager.get_status_id_by_title(status_title)[0]['id']
+    return SQL_data_manager.update_status_of_cards(board_id, old_status_id, new_status_id)
+
 
 def main():
     app.run(

@@ -89,6 +89,11 @@ export let dataHandler = {
             this._data = response;
         });
     },
+    updateStatusOfCards: function (boardId, oldStatusId, statusTitle) {
+        this._api_get('/update-status-of-cards/' + boardId + '/' + oldStatusId + '/' + statusTitle, (response) => {
+            this._data = response;
+        });
+    },
     getStatusesByBoard: function (boardId, callback) {
         this._api_get('/get-status-by-board/' + boardId, (response) => {
             this._data = response;
@@ -129,7 +134,7 @@ export let dataHandler = {
             callback(response);
         });
     },
-    deleteStatus: function (statusId,callback) {
+    deleteStatus: function (statusId, callback) {
         this._api_get('/delete-status/' + statusId, (response) => {
             this._data = response;
             callback(response);

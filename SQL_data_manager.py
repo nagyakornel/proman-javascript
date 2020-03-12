@@ -265,3 +265,22 @@ def delete_status_from_board(cursor, board_id, status_id):
     DELETE FROM boards_statuses
     WHERE board_id = %(board_id)s AND status_id = %(status_id)s;
     """, {'board_id': board_id, 'status_id': status_id})
+
+
+@connection.connection_handler
+def get_status_id_by_title(cursor, title):
+    cursor.execute("""
+    SELECT id
+    FROM statuses
+    WHERE title LIKE %(title)s;
+    """, {'title': title})
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def update_status_of_cards(cursor, board_id, old_status_id, new_status_id):
+    cursor.execute("""
+    UPDATE cards
+    SET status_id = %(new_status_id)s
+    WHERE board_id = %(board_id)s AND status_id = %(old_status_id)s;
+    """, {'new_status_id': new_status_id, 'board_id': board_id, 'old_status_id': old_status_id})

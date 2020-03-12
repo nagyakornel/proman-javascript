@@ -222,9 +222,11 @@ function displayStatus(t) {
     if (t.which === 13) { // 13 = Enter key
         if (t.target.parentNode.hasAttribute('data-status-id')) {
             let boardId = t.target.parentNode.getAttribute('data-board-id');
-            let statusId = t.target.parentNode.getAttribute('data-status-id');
-            dataHandler.deleteStatusFromBoard(boardId, statusId);
+            let oldStatusId = t.target.parentNode.getAttribute('data-status-id');
+            dataHandler.deleteStatusFromBoard(boardId, oldStatusId);
             dataHandler.addNewStatus(boardId, t.target.value);
+            dataHandler.updateStatusOfCards(boardId, oldStatusId, t.target.value);
+
         } else if (t.target.parentNode.hasAttribute('data-board-id')) {
             let boardId = t.target.parentNode.getAttribute('data-board-id');
             dataHandler.editBoardTitle(boardId, t.target.value);
