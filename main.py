@@ -162,7 +162,7 @@ def edit_card_title(cardId: int, newCardTitle):
 @app.route('/edit-board-title/<boardId>/<newBoardTitle>')
 @json_response
 def edit_board_title(boardId: int, newBoardTitle):
-    return SQL_data_manager.edit_card_title(boardId, newBoardTitle)
+    return SQL_data_manager.edit_board_title(boardId, newBoardTitle)
 
 
 @app.route('/edit-status-title/<statusId>/<newStatusTitle>')
