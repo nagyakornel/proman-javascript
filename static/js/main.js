@@ -9,7 +9,7 @@ function showBoards(boards) {
     let x = 0;
     for (let board of boards) {
         let boardContainer = document.createElement('div');
-        boardContainer.className = 'board-container';
+        boardContainer.className = 'board-container main-board';
         let section = document.createElement('section');
         section.className = 'board';
         let boardHeader = document.createElement('div');
@@ -19,9 +19,15 @@ function showBoards(boards) {
         boardTitle.className = 'board-title';
         boardTitle.setAttribute('data-board-id', board.id);
         boardTitle.addEventListener('dblclick', renameStatus);
-        let boardAdd = document.createElement('button');
+        /*let boardAdd = document.createElement('button');
         boardAdd.className = 'board-add';
-        boardAdd.innerHTML = 'Add Card';
+        boardAdd.innerHTML = 'Add Card';*/
+        let boardDelete = document.createElement('i');
+        boardDelete.className = 'fas fa-trash-alt board-delete';
+        boardDelete.addEventListener('click', function () {
+            boardContainer.style.display = 'none';
+            dataHandler.deleteBoard(parseInt(board.id), console.log)
+        });
         let boardToggle = document.createElement('button');
         boardToggle.className = 'board-toggle';
         boardToggle.type = 'button';
@@ -31,7 +37,8 @@ function showBoards(boards) {
         arrowIcon.className = 'fas fa-chevron-down';
         boardToggle.appendChild(arrowIcon);
         boardHeader.appendChild(boardTitle);
-        boardHeader.appendChild(boardAdd);
+        //boardHeader.appendChild(boardAdd);
+        boardHeader.appendChild(boardDelete);
         boardHeader.appendChild(boardToggle);
         section.appendChild(boardHeader);
         let boardBody = document.createElement('div');
@@ -103,6 +110,7 @@ function showBoards(boards) {
             }
         }
     }
+
 }
 
 let createNewPublicBoard = document.getElementById('create-public-board');
@@ -151,10 +159,17 @@ function createBoard(publicity) {
             let oldBoardTitle = document.getElementById('newboardtitle');
             boardHeader.removeChild(oldBoardTitle);
             boardHeader.appendChild(newBoardTitle);
-            let boardAdd = document.createElement('button');
+            let boardDelete = document.createElement('i');
+            boardDelete.className = 'fas fa-trash-alt';
+            boardDelete.addEventListener('click', function () {
+                boardContainer.style.display = 'none';
+                dataHandler.deleteBoard(parseInt(data[0].id), console.log)
+            });
+            boardHeader.appendChild(boardDelete);
+            /*let boardAdd = document.createElement('button');
             boardAdd.className = 'board-add';
             boardAdd.innerHTML = 'Add Card';
-            boardHeader.appendChild(boardAdd);
+            boardHeader.appendChild(boardAdd);*/
             let boardToggle = document.createElement('button');
             boardToggle.className = 'board-toggle';
             boardToggle.type = 'button';
@@ -226,6 +241,7 @@ function displayStatus(t) {
     }
 }
 
-function saveBoardTitle(t){
+function saveBoardTitle(t) {
     console.log('saved?')
 }
+

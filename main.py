@@ -185,8 +185,9 @@ def archive_card(cardId: int):
 
 @app.route('/delete-board/<boardId>')
 @json_response
-def delete_board(boardId: int):
-    return SQL_data_manager.delete_board(boardId)
+def delete_board(boardId):
+    return SQL_data_manager.delete_board(int(boardId))
+
 
 
 @app.route('/delete-status/<statusId>')

@@ -222,9 +222,17 @@ def archive_card(cursor, cardId):
 @connection.connection_handler
 def delete_board(cursor, boardId):
     cursor.execute("""
+    DELETE FROM boards_statuses WHERE board_id = %(boardId)s;
+    """, {"boardId": boardId})
+    cursor.execute("""
+        DELETE FROM cards WHERE board_id = %(boardId)s;
+        """, {"boardId": boardId})
+    cursor.execute("""
     DELETE FROM boards
     WHERE id = %(boardId)s;
             """, {"boardId": boardId})
+
+    return None
 
 
 @connection.connection_handler
