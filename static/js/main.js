@@ -71,6 +71,7 @@ function showBoards(boards) {
                                     let cardTitle = document.createElement('div');
                                     cardTitle.className = 'card-title';
                                     cardTitle.innerHTML = cards[lists][element];
+                                    cardTitle.setAttribute('data-card-id', cards[lists]['id']);
                                     cardTitle.addEventListener('dblclick', renameStatus);
                                     cardRemove.appendChild(cardRemoveButton);
                                     card.appendChild(cardRemove);
@@ -220,13 +221,15 @@ function renameStatus(t) {
 
 function displayStatus(t) {
     if (t.which === 13) { // 13 = Enter key
-        if (t.target.parentNode.hasAttribute('data-status-id')) {
+        if (t.target.parentNode.hasAttribute('data-card-id')){
+            let cardId = t.target.parentNode.getAttribute('data-card-id');
+            dataHandler.editCardTitle(cardId, t.target.value);
+        } else if (t.target.parentNode.hasAttribute('data-status-id')) {
             let boardId = t.target.parentNode.getAttribute('data-board-id');
             let oldStatusId = t.target.parentNode.getAttribute('data-status-id');
             dataHandler.deleteStatusFromBoard(boardId, oldStatusId);
             dataHandler.addNewStatus(boardId, t.target.value);
             dataHandler.updateStatusOfCards(boardId, oldStatusId, t.target.value);
-
         } else if (t.target.parentNode.hasAttribute('data-board-id')) {
             let boardId = t.target.parentNode.getAttribute('data-board-id');
             dataHandler.editBoardTitle(boardId, t.target.value);

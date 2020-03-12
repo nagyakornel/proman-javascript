@@ -100,10 +100,9 @@ export let dataHandler = {
             callback(response);
         });
     },
-    editCardTitle: function (cardId, newCardTitle, callback) {
+    editCardTitle: function (cardId, newCardTitle) {
         this._api_get('/edit-card-title/' + cardId + '/' + newCardTitle, (response) => {
             this._data = response;
-            callback(response);
         });
     },
     editBoardTitle: function (boardId, newBoardTitle) {
