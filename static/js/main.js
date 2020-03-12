@@ -71,17 +71,11 @@ function showBoards(boards) {
                                 if (element === 'title') {
                                     let card = document.createElement('div');
                                     card.className = 'card';
-                                    let cardRemove = document.createElement('div');
-                                    cardRemove.className = 'card-remove';
-                                    let cardRemoveButton = document.createElement('i');
-                                    cardRemoveButton.className = 'fas fa-trash-alt';
                                     let cardTitle = document.createElement('div');
                                     cardTitle.className = 'card-title';
                                     cardTitle.innerHTML = cards[lists][element];
                                     cardTitle.setAttribute('data-card-id', cards[lists]['id']);
                                     cardTitle.addEventListener('dblclick', renameStatus);
-                                    cardRemove.appendChild(cardRemoveButton);
-                                    card.appendChild(cardRemove);
                                     card.appendChild(cardTitle);
                                     boardColumnContent.appendChild(card);
                                 }
@@ -158,6 +152,7 @@ function createBoard(publicity) {
             let newBoardTitle = document.createElement('span');
             newBoardTitle.innerHTML = data[0].title;
             newBoardTitle.className = 'board-title';
+            newBoardTitle.addEventListener('dblclick', renameStatus);
             boardHeader.removeChild(saveButton);
             let oldBoardTitle = document.getElementById('newboardtitle');
             boardHeader.removeChild(oldBoardTitle);
@@ -292,16 +287,24 @@ function addBoardEventListener() {
 }
 
 function removeTrashcan(e){
-    console.log(e.target.firstElementChild)
     if (e.target.firstElementChild.outerHTML === '<div class="card-remove"><i class="fas fa-trash-alt"></i></div>'){
         console.log(e.target.innerHTML)
         console.log(e.target.innerHTML.length)
         let newInnerHTML = e.target.innerHTML.slice(63, e.target.innerHTML.length)
         e.target.innerHTML = newInnerHTML
     }
+    eventListenerToAllCards();
 }
 
 function deleteCard(){
     this.parentNode.parentNode.removeChild(this.parentNode)
 }
 
+function eventListenerToAllCards(){
+    let allCards = document.getElementsByClassName('card-title')
+    for (let i=0; i<allCards.length; i++){
+        allCards[i].addEventListener('dblclick', renameStatus)
+    }
+}
+
+eventListenerToAllCards()
