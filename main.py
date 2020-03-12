@@ -138,7 +138,7 @@ def create_new_card_main(cardTitle, boardId: int, statusId: int):
     return SQL_data_manager.create_new_card(cardTitle, boardId, statusId)
 
 
-@app.route('/create-status/<statusTitle>/<int:boardId>')
+@app.route('/create-status/<int:boardId>/<statusTitle>')
 @json_response
 def new_status(statusTitle, boardId: int):
     """
@@ -168,7 +168,7 @@ def edit_board_title(boardId: int, newBoardTitle):
 @app.route('/edit-status-title/<statusId>/<newStatusTitle>')
 @json_response
 def edit_status_title(statusId: int, newStatusTitle):
-    return SQL_data_manager.edit_card_title(statusId, newStatusTitle)
+    return SQL_data_manager.edit_status_title(statusId, newStatusTitle)
 
 
 @app.route('/delete-card/<cardId>')
@@ -199,6 +199,13 @@ def delete_status(statusId: int):
 @json_response
 def is_archived(cardId: int):
     return SQL_data_manager.is_archived(cardId)
+
+
+@app.route('/delete-status-from-board/<board_id>/<status_id>')
+@json_response
+def delete_status_from_board(board_id, status_id):
+    return SQL_data_manager.delete_status_from_board(board_id, status_id)
+
 
 
 def main():

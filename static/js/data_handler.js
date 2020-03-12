@@ -81,10 +81,12 @@ export let dataHandler = {
         });
     },
     // here comes more features
-    addNewStatus: function (statusTitle, boardId, callback) {
-        this._api_get('/create-status/' + statusTitle + '/' + boardId, (response) => {
+    addNewStatus: function (statusTitle, boardId) {
+        this._api_get('/create-status/' + statusTitle + '/' + boardId);
+    },
+    deleteStatusFromBoard: function (boardId, statusId) {
+        this._api_get('/delete-status-from-board/' + boardId + '/' + statusId, (response) => {
             this._data = response;
-            callback(response);
         });
     },
     getStatusesByBoard: function (boardId, callback) {
@@ -99,16 +101,14 @@ export let dataHandler = {
             callback(response);
         });
     },
-    editBoardTitle: function (boardId, newBoardTitle, callback) {
+    editBoardTitle: function (boardId, newBoardTitle) {
         this._api_get('/edit-board-title/' + boardId + '/' + newBoardTitle, (response) => {
             this._data = response;
-            callback(response);
         });
     },
-    editStatusTitle: function (statusId, newStatusTitle, callback) {
+    editStatusTitle: function (statusId, newStatusTitle) {
         this._api_get('/edit-status-title/' + statusId + '/' + newStatusTitle, (response) => {
             this._data = response;
-            callback(response);
         });
     },
     deleteCard: function (cardId, callback) {
