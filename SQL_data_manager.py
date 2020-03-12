@@ -135,18 +135,20 @@ def create_status(cursor, statusTitle, boardId):
     WHERE title = %(statusTitle)s;
     """, {'statusTitle': statusTitle})
     existing_status = cursor.fetchall()
-    status_id = existing_status[0]['id']
-    if len(existing_status) == 0:
-        cursor.execute("""
-        INSERT INTO statuses (title)
-        VALUES (%(statusTitle)s);
-        """, {'statusTitle': statusTitle})
-        cursor.execute("""
-        SELECT * FROM statuses
-        WHERE title = %(statusTitle)s;
-        """, {'statusTitle': statusTitle})
-        new_status = cursor.fetchall()
-        status_id = new_status[0]['id']
+    try:
+        status_id = existing_status[0]['id']
+    except IndexError:
+        if len(existing_status) == 0:
+            cursor.execute("""
+            INSERT INTO statuses (title)
+            VALUES (%(statusTitle)s);
+            """, {'statusTitle': statusTitle})
+            cursor.execute("""
+            SELECT * FROM statuses
+            WHERE title = %(statusTitle)s;
+            """, {'statusTitle': statusTitle})
+            new_status = cursor.fetchall()
+            status_id = new_status[0]['id']
 
     cursor.execute("""
     INSERT INTO boards_statuses (board_id, status_id)
@@ -263,3 +265,30 @@ def get_status_id(cursor, status_title):
     WHERE title LIKE %(status_title)s
     """, {"status_title": status_title})
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def delete_status_from_board(cursor, board_id, status_id):
+    cursor.execute("""
+    DELETE FROM boards_statuses
+    WHERE board_id = %(board_id)s AND status_id = %(status_id)s;
+    """, {'board_id': board_id, 'status_id': status_id})
+
+
+@connection.connection_handler
+def get_status_id_by_title(cursor, title):
+    cursor.execute("""
+    SELECT id
+    FROM statuses
+    WHERE title LIKE %(title)s;
+    """, {'title': title})
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def update_status_of_cards(cursor, board_id, old_status_id, new_status_id):
+    cursor.execute("""
+    UPDATE cards
+    SET status_id = %(new_status_id)s
+    WHERE board_id = %(board_id)s AND status_id = %(old_status_id)s;
+    """, {'new_status_id': new_status_id, 'board_id': board_id, 'old_status_id': old_status_id})
